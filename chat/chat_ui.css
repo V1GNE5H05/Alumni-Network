@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.basic_frame {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+.left_bar {
+    width: 25%;
+    background-color: #b2f0ea;
+    border-right: 2px solid #4dd0e1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.search-box {
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+    border: 1px solid  #4dd0e1;
+}
+.search-box:hover {
+    border: 2px solid  #4dd0e1;
+    box-shadow: 5px 5px 5px  #4dd0e1;
+}
+.search-bar {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #999;
+}
+
+.conversation-list {
+    padding: 12px;
+    background-color: white;
+    margin: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 5px 5px 5px aqua;
+}
+
+.conversation-list:hover {
+    background-color: #e6e6e6;
+}
+
+.right_bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+}
+.status {
+    background-color: #4CAF50;
+    color: black;
+    border-radius: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 900px;
+}
+.profile {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 2px solid #26c6da;
+    background-color: #8eeaf6;
+}
+
+.profile img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.chat-container {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.chat-box {
+    display: flex;
+    border-top: 2px solid #26c6da;
+    padding: 10px;
+    background-color: #81d4fa;
+}
+
+.text-bar {
+    padding: 10px;
+    border: 1px solid #100707;
+    border-radius: 20px;
+    width: 85%;
+}
+
+.attributes {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+.send-button {
+    padding: 10px 20px;
+    margin-left: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.send-button:hover {
+    background-color: #45a049;
+}

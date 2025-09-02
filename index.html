@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alumni Network - Home</title>
+  <link rel="stylesheet" href="welcome_styles.css"/>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">🎓 Mepco Schlenk Engineering College Alumni</div>
+    <nav>
+      <ul>  
+        <li><a href="">Home</a></li>
+        <li><a href="">Events</a></li>
+        <li><a href="">Jobs</a></li>
+        <li><a href="/login/login_page.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>   
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Connect. Collaborate. Grow.</h1>
+      <p>Welcome to the official Alumni Network of MSEC.<br>Reconnect with your batchmates, attend reunions, and explore career opportunities.</p>
+      <a href="/login/login_page.html" class="cta-button">Join Now</a>
+    </div>
+  </section>
+
+  <section class="info-section">
+    <div class="info-card">
+      <h3>📌 About Us</h3>
+      <p>Our alumni network helps graduates stay connected with their college and peers. We facilitate mentorship, events, and career support.</p>
+    </div>
+    <div class="info-card">
+      <h3>🎯 Mission & Vision</h3>
+      <p>To create a strong, connected community that contributes to personal and professional growth, and supports institutional development.</p>
+    </div>
+    <div class="info-card">
+      <h3>📅 Upcoming Events</h3>
+      <p>Annual Alumni Meet 2025 – Register now!<br>Virtual Career Fair – August 10, 2025.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 MSEC College Alumni Network | Built with ❤️</p>
+  </footer>
+  <script>
+    // Smooth scroll for navbar links
+document.querySelectorAll('.navbar a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    if (this.getAttribute('href').startsWith('#')) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+  });
+});
+
+// Animate info cards when scrolling
+const cards = document.querySelectorAll('.info-card');
+const revealOnScroll = () => {
+  cards.forEach(card => {
+    const cardTop = card.getBoundingClientRect().top;
+    const windowHeight = window.innerHeight;
+    if (cardTop < windowHeight - 100) {
+      card.classList.add('visible');
+    }
+  });
+};
+
+window.addEventListener('scroll', revealOnScroll);
+
+// Add animation class
+cards.forEach(card => card.classList.add('hidden'));
+
+  </script>
+</body>
+</html>

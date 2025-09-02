@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin-Dashboard</title>
+    <link rel="stylesheet" href="admin_dashboard.css">
+</head>
+<body>
+    <div class="basic_frame">
+        
+        <div class="left_bar">
+            <div class="head">
+                <img src="/images/logo.png" alt="mepco" class="logo">
+                <label style="margin-left: 20px; margin-top: 17px;">Mepco Admin</label>
+            </div>
+            <div class="user">
+                <img src="/images/user.png" alt="user" class="user_icon">
+                <label style="margin-left: 20px; margin-top: 17px;">VIGNESH</label>
+            </div>
+
+            <div class="menu">
+                <div class="menu-items" id="dashboardMenu">
+                    <label>Dashboard</label>
+                </div>
+                <div class="menu-items" id="postMenu">
+                    <label>Post</label>
+                </div>
+                <div class="menu-items" id="alumniMenu">
+                    <label>Alumni</label>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="menu-items">
+                    <label>Settings</label>
+                </div>
+                <div class="menu-items" style="cursor: pointer;"  onclick="window.location.href='../login/login_page.html'">
+                    <label style="color: red;">Logout</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-frame">
+            <div class="main-header">
+                <input type="search" placeholder="search" class="search-bar">
+                <button class="add_std_btn" onclick="openModal()">Add Student</button>
+
+                <div class="notification">notification🔔</div>
+            </div>
+            <div class="alumni-statistics">
+                <div class="statistics-data">
+                    <label>Departments</label><br><br>
+                    <label">🏨10+</label>
+                </div>
+                <div class="statistics-data">
+                    <label>No. of Alumnis</label><br><br>
+                    <label">👨‍🎓10,989+</label>
+                </div>
+                <div class="statistics-data">
+                    <label>Employed</label><br><br>
+                    <label">👨‍🎓👨‍🏫👨‍🏭8989+</label>
+                </div>
+                <div class="statistics-data">
+                    <label>Entreprenuer</label><br><br>
+                    <label">👨‍💻2654+</label>
+                </div>
+            </div>
+            <table class="alumni-data-box" id="alumniTableSection">
+                <thead>
+                    <tr>
+                        <th>Alumni ID</th>
+                        <th>Name</th>
+                        <th>DOB</th>
+                        <th>Department</th>
+                        <th>batch</th>
+                        <th>contact</th>
+                        <th>status</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTable"></tbody>
+            </table>
+            <div id="postsSection" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <h2>All Posts</h2>
+                    <button id="addNewPostBtn" style="background:#1651a7;color:#fff;padding:8px 18px;border-radius:8px;border:none;font-weight:600;">Add New Post</button>
+                </div>
+                <div id="postsList"></div>
+            </div>
+            <div id="postModal" class="modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);z-index:1000;align-items:center;justify-content:center;">
+                <div class="modal-content" style="background:#fff;padding:24px;border-radius:10px;max-width:400px;margin:auto;">
+                    <span class="close-btn" id="closePostModal" style="float:right;cursor:pointer;font-size:24px;">&times;</span>
+                    <h2>Add New Post</h2>
+                    <form id="postForm" enctype="multipart/form-data">
+                        <label for="description">Description:</label><br>
+                        <textarea id="description" name="description" rows="4" cols="40" required></textarea><br><br>
+                        <label for="imageFile">Image:</label><br>
+                        <input type="file" id="imageFile" name="imageFile" accept="image/*" required><br><br>
+                        <button type="submit">Submit Post</button>
+                    </form>
+                    <div id="result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Student Add Popup Modal -->
+<div id="studentModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h2>Add Student</h2>
+    <form id="studentForm" onsubmit="addStudent(event)">
+      <input type="text" id="alumni_id" placeholder="Alumni ID" required>
+      <input type="text" id="name" placeholder="Name" required>
+      <input type="date" id="dob" required>
+      <input type="text" id="department" placeholder="Department" required>
+      <input type="text" id="batch" placeholder="Batch (eg: 2023)" required>
+      <input type="text" id="contact" placeholder="Contact" required>
+      <input type="text" id="status" placeholder="Status" required>
+      <button type="submit" class="submit_btn">Add Student</button>
+    </form>
+  </div>
+</div>
+
+        <script src="admin_dashboard.js"></script>
+        <script>
+        // Sidebar menu logic
+        document.getElementById('postMenu').addEventListener('click', function() {
+            document.getElementById('alumniTableSection').style.display = 'none';
+            document.getElementById('postsSection').style.display = 'block';
+            loadPosts();
+        });
+        document.getElementById('dashboardMenu').addEventListener('click', function() {
+            document.getElementById('postsSection').style.display = 'none';
+            document.getElementById('alumniTableSection').style.display = '';
+        });
+        document.getElementById('alumniMenu').addEventListener('click', function() {
+            document.getElementById('postsSection').style.display = 'none';
+            document.getElementById('alumniTableSection').style.display = '';
+        });
+
+        // Add New Post button logic
+        document.getElementById('addNewPostBtn').addEventListener('click', function() {
+            document.getElementById('postModal').style.display = 'flex';
+        });
+        document.getElementById('closePostModal').addEventListener('click', function() {
+            document.getElementById('postModal').style.display = 'none';
+        });
+
+        // Post form submit logic (with file upload)
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const description = document.getElementById('description').value;
+            const imageFile = document.getElementById('imageFile').files[0];
+            const author = "Mepco Schlenk Engineering College";
+            const time = new Date().toLocaleString();
+            const formData = new FormData();
+            formData.append('author', author);
+            formData.append('content', description);
+            formData.append('time', time);
+            formData.append('imageFile', imageFile);
+            fetch('http://localhost:5000/posts', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('result').innerHTML = "Post created successfully!";
+                    document.getElementById('postForm').reset();
+                    document.getElementById('postModal').style.display = 'none';
+                    loadPosts();
+                } else {
+                    document.getElementById('result').innerHTML = "Error: " + (data.message || 'Could not create post');
+                }
+            })
+            .catch(err => {
+                document.getElementById('result').innerHTML = "Error: " + err;
+            });
+        });
+
+        // Load posts from backend and display
+        function loadPosts() {
+            fetch('http://localhost:5000/posts')
+                .then(res => res.json())
+                .then(posts => {
+                    let postsHtml = '';
+                    posts.forEach(post => {
+                        postsHtml += `<div class="post" style="margin-bottom:20px;padding:10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);background:#fff;">
+                            <label style="font-weight:bold;">${post.author || 'Unknown'}</label><br>
+                            <label style="color:gray;">${post.time || ''}</label><br>
+                            ${post.imageUrl ? `<img src="${post.imageUrl}" alt="user post" style="width: 400px; height: 300px;">` : ''}
+                            <p>${post.content || ''}</p>
+                        </div>`;
+                    });
+                    document.getElementById("postsList").innerHTML = postsHtml;
+                });
+        }
+        </script>
+</body>
+</html>

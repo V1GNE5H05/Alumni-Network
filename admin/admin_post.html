@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Post Panel</title>
+  <link rel="stylesheet" href="student_adding_form.css">
+  <style>
+    #postForm { display: none; margin: 30px auto; max-width: 400px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+    #showFormBtn { margin: 30px auto; display: block; }
+    #result { margin-top: 10px; color: green; }
+  </style>
+</head>
+<body>
+  <button id="showFormBtn">Create New Post</button>
+  <form id="postForm">
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description" rows="4" cols="40" required></textarea><br><br>
+    <label for="imageUrl">Image URL:</label><br>
+    <input type="text" id="imageUrl" name="imageUrl" placeholder="images/clg_logo.png" required><br><br>
+    <button type="submit">Submit Post</button>
+  </form>
+  <div id="result"></div>
+  <script src="admin_post.js"></script>
+</body>
+</html>

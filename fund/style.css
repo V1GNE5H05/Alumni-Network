@@ -1,0 +1,180 @@
+/* ===== General Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+/* ===== Background Animation ===== */
+body {
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #f3f3f3, #cce0ff, #e6f2ff, #ffffff);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== Header ===== */
+header {
+  text-align: center;
+  padding: 20px;
+  background: #004080;
+  color: white;
+}
+
+header h1 {
+  font-size: 1.8rem;
+}
+
+header p {
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+/* ===== Navigation Bar ===== */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  background: #0066cc;
+  padding: 12px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: #ffcc00;
+  text-decoration: underline;
+}
+
+/* ===== Main Container ===== */
+.container {
+  flex: 1;
+  padding: 30px;
+  text-align: center;
+}
+
+.container h2 {
+  margin-bottom: 25px;
+  color: #004080;
+}
+
+/* ===== Campaign Cards Grid ===== */
+.campaign-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.campaign-card {
+  background: #fff;
+  border-radius: 12px;
+  width: 300px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.campaign-card:hover {
+  transform: translateY(-5px);
+}
+
+.campaign-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.campaign-card h4 {
+  margin: 12px 0 8px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.campaign-card .desc {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.progress-wrap {
+  background: #eee;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 8px;
+  margin-bottom: 15px;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #0099ff, #00cc66);
+}
+
+/* ===== Donate Row ===== */
+.donate-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+button {
+  border: none;
+  border-radius: 20px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+
+button.preset {
+  background: #f0f0f0;
+}
+
+button.preset:hover {
+  background: #d9d9d9;
+}
+
+button.donate-btn {
+  background: #0066cc;
+  color: white;
+  font-weight: bold;
+}
+
+button.donate-btn:hover {
+  background: #004d99;
+}
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 15px;
+  background: #004080;
+  color: white;
+  font-size: 0.85rem;
+}
