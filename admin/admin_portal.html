@@ -1,201 +1,465 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <title>Admin-Dashboard</title>
     <link rel="stylesheet" href="admin_dashboard.css">
+    <style>
+        /* small helper styles for delete overlay */
+        .fund-row-deleting {
+            position: relative;
+            opacity: .55;
+        }
+        .fund-row-deleting:after {
+            content: 'Deleting...';
+            position: absolute;
+            inset: 0;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:.75rem;
+            font-weight:600;
+            color:#1651a7;
+            backdrop-filter: blur(2px);
+        }
+    </style>
 </head>
 <body>
-    <div class="basic_frame">
-        
-        <div class="left_bar">
-            <div class="head">
-                <img src="/images/logo.png" alt="mepco" class="logo">
-                <label style="margin-left: 20px; margin-top: 17px;">Mepco Admin</label>
-            </div>
-            <div class="user">
-                <img src="/images/user.png" alt="user" class="user_icon">
-                <label style="margin-left: 20px; margin-top: 17px;">VIGNESH</label>
-            </div>
-
-            <div class="menu">
-                <div class="menu-items" id="dashboardMenu">
-                    <label>Dashboard</label>
-                </div>
-                <div class="menu-items" id="postMenu">
-                    <label>Post</label>
-                </div>
-                <div class="menu-items" id="alumniMenu">
-                    <label>Alumni</label>
-                </div>
-            </div>
-
-            <div class="footer">
-                <div class="menu-items">
-                    <label>Settings</label>
-                </div>
-                <div class="menu-items" style="cursor: pointer;"  onclick="window.location.href='../login/login_page.html'">
-                    <label style="color: red;">Logout</label>
-                </div>
-            </div>
+<div class="basic_frame">
+    <div class="left_bar">
+        <div class="head">
+            <img src="/images/logo.png" alt="mepco" class="logo">
+            <label style="margin-left:20px;margin-top:17px;">Mepco Admin</label>
+        </div>
+        <div class="user">
+            <img src="/images/user.png" alt="user" class="user_icon">
+            <label style="margin-left:20px;margin-top:17px;">VIGNESH</label>
         </div>
 
-        <div class="main-frame">
-            <div class="main-header">
-                <input type="search" placeholder="search" class="search-bar">
-                <button class="add_std_btn" onclick="openModal()">Add Student</button>
+        <div class="menu">
+            <div class="menu-items" id="dashboardMenu"><label>Dashboard</label></div>
+            <div class="menu-items" id="postMenu"><label>Post</label></div>
+            <div class="menu-items" id="alumniMenu"><label>Alumni</label></div>
+            <div class="menu-items" id="fundmenu"><label>Fund Posting</label></div>
+        </div>
 
-                <div class="notification">notification🔔</div>
-            </div>
-            <div class="alumni-statistics">
-                <div class="statistics-data">
-                    <label>Departments</label><br><br>
-                    <label">🏨10+</label>
-                </div>
-                <div class="statistics-data">
-                    <label>No. of Alumnis</label><br><br>
-                    <label">👨‍🎓10,989+</label>
-                </div>
-                <div class="statistics-data">
-                    <label>Employed</label><br><br>
-                    <label">👨‍🎓👨‍🏫👨‍🏭8989+</label>
-                </div>
-                <div class="statistics-data">
-                    <label>Entreprenuer</label><br><br>
-                    <label">👨‍💻2654+</label>
-                </div>
-            </div>
-            <table class="alumni-data-box" id="alumniTableSection">
-                <thead>
-                    <tr>
-                        <th>Alumni ID</th>
-                        <th>Name</th>
-                        <th>DOB</th>
-                        <th>Department</th>
-                        <th>batch</th>
-                        <th>contact</th>
-                        <th>status</th>
-                    </tr>
-                </thead>
-                <tbody id="studentTable"></tbody>
-            </table>
-            <div id="postsSection" style="display:none;">
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <h2>All Posts</h2>
-                    <button id="addNewPostBtn" style="background:#1651a7;color:#fff;padding:8px 18px;border-radius:8px;border:none;font-weight:600;">Add New Post</button>
-                </div>
-                <div id="postsList"></div>
-            </div>
-            <div id="postModal" class="modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);z-index:1000;align-items:center;justify-content:center;">
-                <div class="modal-content" style="background:#fff;padding:24px;border-radius:10px;max-width:400px;margin:auto;">
-                    <span class="close-btn" id="closePostModal" style="float:right;cursor:pointer;font-size:24px;">&times;</span>
-                    <h2>Add New Post</h2>
-                    <form id="postForm" enctype="multipart/form-data">
-                        <label for="description">Description:</label><br>
-                        <textarea id="description" name="description" rows="4" cols="40" required></textarea><br><br>
-                        <label for="imageFile">Image:</label><br>
-                        <input type="file" id="imageFile" name="imageFile" accept="image/*" required><br><br>
-                        <button type="submit">Submit Post</button>
-                    </form>
-                    <div id="result"></div>
-                </div>
+        <div class="footer">
+            <div class="menu-items"><label>Settings</label></div>
+            <div class="menu-items" style="cursor:pointer;" onclick="window.location.href='../login/login_page.html'">
+                <label style="color:red;">Logout</label>
             </div>
         </div>
     </div>
-    <!-- Student Add Popup Modal -->
-<div id="studentModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
-    <h2>Add Student</h2>
-    <form id="studentForm" onsubmit="addStudent(event)">
-      <input type="text" id="alumni_id" placeholder="Alumni ID" required>
-      <input type="text" id="name" placeholder="Name" required>
-      <input type="date" id="dob" required>
-      <input type="text" id="department" placeholder="Department" required>
-      <input type="text" id="batch" placeholder="Batch (eg: 2023)" required>
-      <input type="text" id="contact" placeholder="Contact" required>
-      <input type="text" id="status" placeholder="Status" required>
-      <button type="submit" class="submit_btn">Add Student</button>
-    </form>
-  </div>
+
+    <div class="main-frame">
+        <div class="main-header">
+            <input type="search" placeholder="search" class="search-bar">
+            <button class="add_std_btn" onclick="openModal()">Add Student</button>
+            <div class="notification">notification🔔</div>
+        </div>
+
+        <div class="alumni-statistics">
+            <div class="statistics-data">
+                <label>Departments</label><br><br><label>🏨10+</label>
+            </div>
+            <div class="statistics-data">
+                <label>No. of Alumnis</label><br><br><label>👨‍🎓10,989+</label>
+            </div>
+            <div class="statistics-data">
+                <label>Employed</label><br><br><label>👨‍🎓👨‍🏫👨‍🏭8989+</label>
+            </div>
+            <div class="statistics-data">
+                <label>Entreprenuer</label><br><br><label>👨‍💻2654+</label>
+            </div>
+        </div>
+
+        <table class="alumni-data-box" id="alumniTableSection">
+            <thead>
+            <tr>
+                <th>Alumni ID</th>
+                <th>Name</th>
+                <th>DOB</th>
+                <th>Department</th>
+                <th>batch</th>
+                <th>contact</th>
+                <th>status</th>
+            </tr>
+            </thead>
+            <tbody id="studentTable"></tbody>
+        </table>
+
+        <div id="postsSection" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h2>All Posts</h2>
+                <button id="addNewPostBtn" style="background:#1651a7;color:#fff;padding:8px 18px;border-radius:8px;border:none;font-weight:600;">Add New Post</button>
+            </div>
+            <div id="postsList"></div>
+        </div>
+
+        <!-- FUND SECTION -->
+        <div id="fundSection" style="display:none;">
+            <div style="display:flex;gap:10px;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+                <h2 style="margin:0;flex:1 1 auto;">Fund Posting</h2>
+                <div style="display:flex;gap:10px;">
+                    <button id="reloadFundsBtn" style="background:#f1f6fb;color:#1651a7;padding:8px 14px;border:1px solid #1651a7;border-radius:8px;font-weight:600;cursor:pointer;">Reload</button>
+                    <button id="addFundBtn" style="background:#1651a7;color:#fff;padding:8px 18px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">Post</button>
+                </div>
+            </div>
+            <div id="fundContent" style="margin-top:6px;"></div>
+            <table id="fundTable" style="width:100%;border-collapse:collapse;margin-top:12px;font-size:0.85rem;">
+                <thead>
+                <tr style="background:#1651a7;color:#fff;">
+                    <th style="padding:8px 6px;text-align:left;">Title</th>
+                    <th style="padding:8px 6px;text-align:left;">Description</th>
+                    <th style="padding:8px 6px;text-align:right;">Goal (₹)</th>
+                    <th style="padding:8px 6px;text-align:right;">Raised (₹)</th>
+                    <th style="padding:8px 6px;text-align:left;">Date</th>
+                    <th style="padding:8px 6px;text-align:center;">Action</th>
+                </tr>
+                </thead>
+                <tbody id="fundTableBody">
+                <tr><td colspan="6" style="padding:14px;text-align:center;color:#555;">Click Fund Posting to load funds...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- END FUND SECTION -->
+
+        <div id="postModal" class="modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);z-index:1000;align-items:center;justify-content:center;">
+            <div class="modal-content" style="background:#fff;padding:24px;border-radius:10px;max-width:400px;margin:auto;">
+                <span class="close-btn" id="closePostModal" style="float:right;cursor:pointer;font-size:24px;">&times;</span>
+                <h2>Add New Post</h2>
+                <form id="postForm" enctype="multipart/form-data">
+                    <label for="description">Description:</label><br>
+                    <textarea id="description" name="description" rows="4" cols="40" required></textarea><br><br>
+                    <label for="imageFile">Image:</label><br>
+                    <input type="file" id="imageFile" name="imageFile" accept="image/*" required><br><br>
+                    <button type="submit">Submit Post</button>
+                </form>
+                <div id="result" style="margin-top:8px;font-size:.8rem;"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
-        <script src="admin_dashboard.js"></script>
-        <script>
-        // Sidebar menu logic
-        document.getElementById('postMenu').addEventListener('click', function() {
-            document.getElementById('alumniTableSection').style.display = 'none';
-            document.getElementById('postsSection').style.display = 'block';
-            loadPosts();
-        });
-        document.getElementById('dashboardMenu').addEventListener('click', function() {
-            document.getElementById('postsSection').style.display = 'none';
-            document.getElementById('alumniTableSection').style.display = '';
-        });
-        document.getElementById('alumniMenu').addEventListener('click', function() {
-            document.getElementById('postsSection').style.display = 'none';
-            document.getElementById('alumniTableSection').style.display = '';
-        });
+<!-- Student Add Popup Modal -->
+<div id="studentModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2>Add Student</h2>
+        <form id="studentForm" onsubmit="addStudent(event)">
+            <input type="text" id="alumni_id" placeholder="Alumni ID" required>
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="date" id="dob" required>
+            <input type="text" id="department" placeholder="Department" required>
+            <input type="text" id="batch" placeholder="Batch (eg: 2023)" required>
+            <input type="text" id="contact" placeholder="Contact" required>
+            <input type="text" id="status" placeholder="Status" required>
+            <button type="submit" class="submit_btn">Add Student</button>
+        </form>
+    </div>
+</div>
 
-        // Add New Post button logic
-        document.getElementById('addNewPostBtn').addEventListener('click', function() {
-            document.getElementById('postModal').style.display = 'flex';
-        });
-        document.getElementById('closePostModal').addEventListener('click', function() {
-            document.getElementById('postModal').style.display = 'none';
-        });
+<!-- FUND CREATE MODAL -->
+<div id="fundModal" class="modal" style="display:none;position:fixed;inset:0;z-index:1200;background:rgba(0,0,0,0.35);align-items:center;justify-content:center;">
+    <div style="background:#fff;padding:24px 26px;border-radius:12px;width:460px;max-width:94%;position:relative;box-shadow:0 8px 32px -6px rgba(0,0,0,.25);font-size:14px;">
+        <span id="closeFundModal" style="position:absolute;top:10px;right:14px;font-size:26px;cursor:pointer;line-height:20px;">&times;</span>
+        <h2 style="margin:0 0 14px;font-size:1.2rem;">Create Fund</h2>
+        <form id="fundForm" autocomplete="off">
+            <label style="font-size:.7rem;font-weight:600;">Title</label>
+            <input type="text" id="fundTitle" required style="width:100%;padding:10px 12px;margin:4px 0 10px;border:1px solid #ccc;border-radius:6px;">
+            <label style="font-size:.7rem;font-weight:600;">Goal (INR)</label>
+            <input type="number" id="fundGoal" min="1" step="1" required style="width:100%;padding:10px 12px;margin:4px 0 10px;border:1px solid #ccc;border-radius:6px;">
+            <label style="font-size:.7rem;font-weight:600;">Description</label>
+            <textarea id="fundDescription" rows="7" required style="width:100%;padding:10px 12px;margin:4px 0 12px;border:1px solid #ccc;border-radius:6px;resize:vertical;"></textarea>
+            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px;">
+                <button type="button" id="cancelFundBtn" style="background:#eee;border:1px solid #ccc;padding:8px 18px;border-radius:6px;cursor:pointer;">Cancel</button>
+                <button type="submit" id="createFundBtn" style="background:#1651a7;color:#fff;border:none;padding:9px 22px;border-radius:6px;font-weight:600;cursor:pointer;">Create</button>
+            </div>
+            <div id="fundResult" style="margin-top:12px;font-size:.75rem;"></div>
+        </form>
+    </div>
+</div>
 
-        // Post form submit logic (with file upload)
-        document.getElementById('postForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const description = document.getElementById('description').value;
-            const imageFile = document.getElementById('imageFile').files[0];
-            const author = "Mepco Schlenk Engineering College";
-            const time = new Date().toLocaleString();
-            const formData = new FormData();
-            formData.append('author', author);
-            formData.append('content', description);
-            formData.append('time', time);
-            formData.append('imageFile', imageFile);
-            fetch('http://localhost:5000/posts', {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('result').innerHTML = "Post created successfully!";
-                    document.getElementById('postForm').reset();
-                    document.getElementById('postModal').style.display = 'none';
-                    loadPosts();
-                } else {
-                    document.getElementById('result').innerHTML = "Error: " + (data.message || 'Could not create post');
-                }
-            })
-            .catch(err => {
-                document.getElementById('result').innerHTML = "Error: " + err;
+<script src="admin_dashboard.js"></script>
+<script>
+/* ---------------- Existing Sidebar / Post Logic ---------------- */
+document.getElementById('postMenu').addEventListener('click', function() {
+    document.getElementById('alumniTableSection').style.display = 'none';
+    document.getElementById('postsSection').style.display = 'block';
+    document.getElementById('fundSection').style.display = 'none';
+    loadPosts();
+});
+
+document.getElementById('dashboardMenu').addEventListener('click', function() {
+    document.getElementById('postsSection').style.display = 'none';
+    document.getElementById('fundSection').style.display = 'none';
+    document.getElementById('alumniTableSection').style.display = '';
+});
+
+document.getElementById('alumniMenu').addEventListener('click', function() {
+    document.getElementById('postsSection').style.display = 'none';
+    document.getElementById('fundSection').style.display = 'none';
+    document.getElementById('alumniTableSection').style.display = '';
+});
+
+document.getElementById('fundmenu').addEventListener('click', function() {
+    document.getElementById('alumniTableSection').style.display = 'none';
+    document.getElementById('postsSection').style.display = 'none';
+    document.getElementById('fundSection').style.display = 'block';
+});
+
+document.getElementById('addNewPostBtn').addEventListener('click', function() {
+    document.getElementById('postModal').style.display = 'flex';
+});
+document.getElementById('closePostModal').addEventListener('click', function() {
+    document.getElementById('postModal').style.display = 'none';
+});
+
+document.getElementById('postForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const description = document.getElementById('description').value;
+    const imageFile = document.getElementById('imageFile').files[0];
+    const author = "Mepco Schlenk Engineering College";
+    const time = new Date().toLocaleString();
+    const formData = new FormData();
+    formData.append('author', author);
+    formData.append('content', description);
+    formData.append('time', time);
+    formData.append('imageFile', imageFile);
+    fetch('http://localhost:5000/posts', { method: 'POST', body: formData })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('result').innerHTML = "Post created successfully!";
+                document.getElementById('postForm').reset();
+                document.getElementById('postModal').style.display = 'none';
+                loadPosts();
+            } else {
+                document.getElementById('result').innerHTML = "Error: " + (data.message || 'Could not create post');
+            }
+        })
+        .catch(err => {
+            document.getElementById('result').innerHTML = "Error: " + err;
+        });
+});
+
+function loadPosts() {
+    fetch('http://localhost:5000/posts')
+        .then(res => res.json())
+        .then(posts => {
+            let postsHtml = '';
+            posts.forEach(post => {
+                postsHtml += `<div class="post" style="margin-bottom:20px;padding:10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);background:#fff;">
+                    <label style="font-weight:bold;">${post.author || 'Unknown'}</label><br>
+                    <label style="color:gray;">${post.time || ''}</label><br>
+                    ${post.imageUrl ? `<img src="${post.imageUrl}" alt="user post" style="width:400px;height:300px;">` : ''}
+                    <p>${post.content || ''}</p>
+                </div>`;
             });
+            document.getElementById("postsList").innerHTML = postsHtml;
         });
+}
+/* ---------------- End Existing Logic ---------------- */
 
-        // Load posts from backend and display
-        function loadPosts() {
-            fetch('http://localhost:5000/posts')
-                .then(res => res.json())
-                .then(posts => {
-                    let postsHtml = '';
-                    posts.forEach(post => {
-                        postsHtml += `<div class="post" style="margin-bottom:20px;padding:10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);background:#fff;">
-                            <label style="font-weight:bold;">${post.author || 'Unknown'}</label><br>
-                            <label style="color:gray;">${post.time || ''}</label><br>
-                            ${post.imageUrl ? `<img src="${post.imageUrl}" alt="user post" style="width: 400px; height: 300px;">` : ''}
-                            <p>${post.content || ''}</p>
-                        </div>`;
-                    });
-                    document.getElementById("postsList").innerHTML = postsHtml;
-                });
+/* ---------------- Fund Posting Logic (Enhanced Delete Debug) ---------------- */
+(function(){
+    const API_BASE = 'http://localhost:5000';
+    let fundsLoaded = false;
+
+    const fundMenu       = document.getElementById('fundmenu');
+    const reloadBtn      = document.getElementById('reloadFundsBtn');
+    const fundTableBody  = document.getElementById('fundTableBody');
+    const addFundBtn     = document.getElementById('addFundBtn');
+    const fundModal      = document.getElementById('fundModal');
+    const closeFundModal = document.getElementById('closeFundModal');
+    const cancelFundBtn  = document.getElementById('cancelFundBtn');
+    const fundForm       = document.getElementById('fundForm');
+    const fundResult     = document.getElementById('fundResult');
+    const createBtn      = document.getElementById('createFundBtn');
+
+    // Quick API reachability check when first entering the fund tab.
+    fundMenu.addEventListener('click', async () => {
+        if(!fundsLoaded){
+            try {
+                // HEAD ping
+                await fetch(API_BASE + '/api/fundraising', { method:'HEAD', mode:'cors' });
+            } catch (e) {
+                console.warn('%cDELETE_DEBUG: Cannot reach /api/fundraising. Check server running & CORS.', 'color:#d00;');
+            }
         }
-        </script>
+        if(!fundsLoaded) loadFunds();
+    });
+
+    reloadBtn.addEventListener('click', () => {
+        fundsLoaded = true;
+        loadFunds();
+    });
+
+    addFundBtn.addEventListener('click', () => {
+        resetFundForm();
+        openFundModal();
+    });
+
+    closeFundModal.addEventListener('click', closeFundModalFn);
+    cancelFundBtn.addEventListener('click', closeFundModalFn);
+    fundModal.addEventListener('click', e => { if(e.target === fundModal) closeFundModalFn(); });
+
+    fundForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        fundResult.textContent = '';
+        const title = document.getElementById('fundTitle').value.trim();
+        const goalVal = document.getElementById('fundGoal').value.trim();
+        const description = document.getElementById('fundDescription').value.trim();
+
+        if(!title || !goalVal || !description){
+            showFundResult('Please fill all fields','red'); return;
+        }
+        const goal = Number(goalVal);
+        if(!Number.isFinite(goal) || goal <= 0){
+            showFundResult('Goal must be a positive number','red'); return;
+        }
+
+        toggleFundSubmitting(true);
+        try {
+            const res = await fetch(API_BASE + '/api/fundraising', {
+                method: 'POST',
+                mode: 'cors',
+                headers: { 'Content-Type':'application/json', 'Accept':'application/json' },
+                body: JSON.stringify({ title, description, goal })
+            });
+            const data = await safeParseJSON(res);
+            if(!res.ok){
+                showFundResult((data && data.message) || 'Failed to create fund','red');
+            } else {
+                showFundResult('Fund created successfully','green');
+                await loadFunds();
+                setTimeout(closeFundModalFn, 600);
+            }
+        } catch(err){
+            showFundResult('Network error: ' + err.message,'red');
+        } finally {
+            toggleFundSubmitting(false);
+        }
+    });
+
+    // DELETE with deep debugging
+    fundTableBody.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button[data-action="delete-fund"]');
+        if(!btn) return;
+        const id = btn.getAttribute('data-id');
+        if(!id) return;
+        if(!confirm('Delete this fund? This cannot be undone.')) return;
+
+        const tr = btn.closest('tr');
+        if(tr) tr.classList.add('fund-row-deleting');
+
+        console.log('%cDELETE_DEBUG: Sending DELETE for id: ' + id, 'color:#1651a7;');
+
+        try {
+            const res = await fetch(API_BASE + '/api/fundraising/' + encodeURIComponent(id), {
+                method:'DELETE',
+                mode:'cors',
+                headers: { 'Accept':'application/json' }
+            }).catch(err => {
+                console.error('%cDELETE_DEBUG: Fetch error (likely CORS/preflight)', 'color:#d00;', err);
+                throw err;
+            });
+
+            const status = res.status;
+            let bodyText = '';
+            try { bodyText = await res.text(); } catch(_) {}
+            console.log('%cDELETE_DEBUG: Response status=' + status + ' body=' + bodyText, 'color:#555;');
+
+            if (status === 204 || status === 200 || status === 404) {
+                // treat 404 as success (already gone)
+                console.log('%cDELETE_DEBUG: Status indicates success or already deleted. Reloading list...', 'color:green;');
+                await loadFunds();
+            } else if (status === 405) {
+                alert('Delete method not allowed (405). Backend route missing or wrong HTTP verb.');
+            } else {
+                alert('Delete failed (status ' + status + '). See console for details.');
+                if(tr) tr.classList.remove('fund-row-deleting');
+            }
+        } catch(err){
+            alert('Network/CORS error deleting fund: ' + err.message);
+            if(tr) tr.classList.remove('fund-row-deleting');
+        }
+    });
+
+    async function loadFunds(){
+        fundTableBody.innerHTML = '<tr><td colspan="6" style="padding:14px;text-align:center;color:#444;">Loading...</td></tr>';
+        try {
+            const res = await fetch(API_BASE + '/api/fundraising', { mode:'cors', headers:{'Accept':'application/json'} });
+            if(!res.ok) throw new Error('Failed to load (status '+res.status+')');
+            const list = await safeParseJSON(res);
+            fundsLoaded = true;
+            renderFundRows(list);
+        } catch(err){
+            fundTableBody.innerHTML = '<tr><td colspan="6" style="padding:14px;text-align:center;color:#b3261e;">Error loading funds</td></tr>';
+            console.error('Load funds error:', err);
+        }
+    }
+
+    function renderFundRows(list){
+        if(!Array.isArray(list) || list.length === 0){
+            fundTableBody.innerHTML = '<tr><td colspan="6" style="padding:14px;text-align:center;color:#555;">No funds available.</td></tr>';
+            return;
+        }
+        fundTableBody.innerHTML = list.map(f => fundRowHTML(f)).join('');
+    }
+
+    function fundRowHTML(f){
+        const title = esc(f.title);
+        const desc = esc((f.description || '').split('\n')[0].slice(0,120)) + ((f.description||'').length>120 ? '...' : '');
+        const goal = Number(f.goal||0).toLocaleString('en-IN');
+        const raised = Number(f.raised||0).toLocaleString('en-IN');
+        const date = formatDate(f.date || f.createdAt);
+        const id = f._id || '';
+        return `<tr data-id="${id}" style="border-bottom:1px solid #e2e8ee;">
+            <td style="padding:8px 6px;font-weight:600;max-width:180px;word-break:break-word;">${title}</td>
+            <td style="padding:8px 6px;max-width:280px;word-break:break-word;font-size:.75rem;color:#333;">${desc}</td>
+            <td style="padding:8px 6px;text-align:right;">${goal}</td>
+            <td style="padding:8px 6px;text-align:right;">${raised}</td>
+            <td style="padding:8px 6px;">${date}</td>
+            <td style="padding:6px 6px;text-align:center;">
+                <button data-action="delete-fund" data-id="${id}" title="Delete"
+                    style="background:#fff;border:1px solid #d3dbe3;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:14px;line-height:1;">🗑</button>
+            </td>
+        </tr>`;
+    }
+
+    function esc(str){
+        return String(str||'').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+    function formatDate(d){
+        try { return new Date(d).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'}); }
+        catch { return ''; }
+    }
+
+    function openFundModal(){ fundModal.style.display='flex'; document.body.style.overflow='hidden'; }
+    function closeFundModalFn(){ fundModal.style.display='none'; document.body.style.overflow=''; }
+    function resetFundForm(){ fundForm.reset(); fundResult.textContent=''; toggleFundSubmitting(false); }
+    function showFundResult(msg,color){ fundResult.textContent=msg; fundResult.style.color=color; }
+    function toggleFundSubmitting(disabled){
+        [...fundForm.elements].forEach(el => el.disabled = disabled);
+        createBtn.textContent = disabled ? 'Creating...' : 'Create';
+    }
+    async function safeParseJSON(res){
+        const text = await res.text();
+        try { return text ? JSON.parse(text) : null; } catch { return null; }
+    }
+
+    // Manual debug helper (call from DevTools: testDeleteEndpoint('ID'))
+    window.testDeleteEndpoint = async function(id){
+        console.log('Manual test delete for ID:', id);
+        const r = await fetch(API_BASE + '/api/fundraising/' + id, { method:'DELETE', mode:'cors' }).catch(e=>({error:e}));
+        console.log('Response raw:', r);
+        if(r && r.text) console.log('Body:', await r.text());
+    };
+
+    window.debugReloadFunds = loadFunds; // helper
+})();
+</script>
 </body>
 </html>
