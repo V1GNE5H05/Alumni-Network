@@ -21,7 +21,7 @@ fetch('http://localhost:5000/posts')
 			postsHtml += `<div class="post" data-idx="${idx}" style="margin-bottom:20px;padding:10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);background:#fff;cursor:pointer;">
 				<label style="font-weight:bold;">${post.author || 'Unknown'}</label><br>
 				<label style="color:gray;">${post.time || ''}</label><br>
-				${post.imageUrl ? `<img src="${post.imageUrl}" alt="user post" style="width: 400px; height: 300px;">` : ''}
+				${post.imageUrl ? `<img src="http://localhost:5000${post.imageUrl}" alt="user post" style="width: 400px; height: 300px;">` : `<img src="images/alternate.png" alt="alternate" style="width: 400px; height: 300px;">`}
 				<p>${post.content || ''}</p>
 			</div>`;
 		});
