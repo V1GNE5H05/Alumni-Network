@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contribute</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --accent:#1c08f8;
+      --ok:#218838;
+      --err:#b3261e;
+      --bg:#f5f6f8;
+      --radius:14px;
+      --border:#d3d7dd;
+      --field-bg:#f9f9fb;
+      --focus:#2563eb;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:var(--bg);
+      color:#111;
+    }
+    nav {
+      background: var(--accent);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+      padding:10px 0;
+      gap:22px;
+    }
+    nav a {
+      color:#fff;
+      text-decoration:none;
+      font-weight:bold;
+      font-size:14px;
+      position:relative;
+      padding:4px 2px;
+    }
+    nav a:hover { text-decoration:underline; }
+
+    .wrap {
+      max-width:1100px;
+      margin:40px auto 110px;
+      background:#fff;
+      border-radius:var(--radius);
+      box-shadow:0 4px 18px -6px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.08);
+      padding:54px 64px 66px;
+      position:relative;
+    }
+    h1 {
+      margin:0 0 6px;
+      font-size:2.05rem;
+      font-weight:700;
+      letter-spacing:-.5px;
+    }
+    .subtitle {
+      margin:0 0 34px;
+      font-size:.92rem;
+      color:#444;
+    }
+
+    form {
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:26px 40px;
+    }
+    form.compact { gap:22px 28px; }
+    form .full { grid-column:1 / -1; }
+    label {
+      display:block;
+      font-size:.72rem;
+      font-weight:600;
+      letter-spacing:.6px;
+      margin:0 0 6px;
+      text-transform:uppercase;
+      color:#222;
+    }
+    .req { color:#b45309; margin-left:4px; }
+    input, select, textarea {
+      width:100%;
+      font:inherit;
+      padding:11px 13px;
+      border:1px solid var(--border);
+      border-radius:5px;
+      background:var(--field-bg);
+      transition:border-color .18s, background .18s, box-shadow .18s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline:none;
+      background:#fff;
+      border-color:var(--focus);
+      box-shadow:0 0 0 3px rgba(37,99,235,.18);
+    }
+    textarea { resize:vertical; min-height:120px; }
+
+    .error-text {
+      font-size:.62rem;
+      font-weight:600;
+      color:var(--err);
+      margin-top:5px;
+      letter-spacing:.4px;
+      min-height:14px;
+    }
+    .error-border { border-color:var(--err)!important; background:#fff5f5!important; }
+
+    .actions {
+      grid-column:1 / -1;
+      display:flex;
+      gap:26px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:10px;
+    }
+    button {
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      font:inherit;
+      font-weight:600;
+      border-radius:45px;
+      padding:14px 38px;
+      letter-spacing:.4px;
+      transition:background .2s, transform .15s;
+    }
+    .btn-primary {
+      background:linear-gradient(90deg,#28a745,#2fb24f);
+      color:#fff;
+    }
+    .btn-primary:hover { background:linear-gradient(90deg,#23923c,#2a9d46); }
+    .btn-primary:active { transform:translateY(1px); }
+    .btn-text {
+      background:#eceef1;
+      color:#222;
+    }
+    .btn-text:hover { background:#dfe3e8; }
+    .btn-text:active { transform:translateY(1px); }
+
+    #status {
+      font-size:.72rem;
+      margin-top:4px;
+      letter-spacing:.3px;
+    }
+    #status.success { color:var(--ok); }
+    #status.fail { color:var(--err); }
+
+    .disabled-overlay {
+      position:absolute;
+      inset:0;
+      background:rgba(255,255,255,.55);
+      backdrop-filter:blur(1px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      font-size:.85rem;
+      font-weight:600;
+      color:#444;
+      z-index:10;
+    }
+
+    .meta-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:28px;
+      align-items:center;
+      margin:0 0 38px;
+    }
+    .fund-info { flex:1; min-width:260px; }
+    .fund-stats {
+      font-size:.68rem;
+      font-weight:600;
+      background:#f1f3f7;
+      padding:8px 14px;
+      border-radius:8px;
+      display:inline-flex;
+      gap:18px;
+      color:#333;
+      letter-spacing:.4px;
+    }
+    .fund-stats span { white-space:nowrap; }
+
+    #contrib-table-section { margin-top:70px; }
+    #contrib-table-section h2 {
+      font-size:1.15rem;
+      margin:0 0 14px;
+      letter-spacing:.4px;
+    }
+    .table-wrap {
+      overflow-x:auto;
+      border:1px solid #e3e6ea;
+      border-radius:10px;
+      background:#fff;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:.78rem;
+      min-width:900px;
+    }
+    thead { background:#f7f9fb; }
+    th, td {
+      padding:10px 12px;
+      text-align:left;
+      border-bottom:1px solid #eceff3;
+    }
+    th {
+      font-weight:600;
+      font-size:.66rem;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+      color:#333;
+    }
+    tbody tr:last-child td { border-bottom:none; }
+    tbody tr:hover { background:#fafcff; }
+    .empty-row { text-align:center; font-style:italic; color:#666; }
+    .hidden { display:none !important; }
+
+    @media (max-width:920px) {
+      .wrap { padding:46px 34px 60px; }
+      .meta-row { gap:20px; }
+      .fund-stats { width:100%; justify-content:flex-start; flex-wrap:wrap; }
+    }
+    @media (max-width:760px) {
+      form { grid-template-columns:1fr; }
+      .actions { justify-content:flex-start; }
+    }
+  </style>
+  <!-- Razorpay Checkout Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="../fund.html">Fundraising</a>
+    <a href="../alumni profile/alumni_profile.html" target="_blank">Profile</a>
+    <a href="#">About Us</a>
+    <a href="../eventpage/event_page.html" target="_blank">Events</a>
+    <a href="../gallery/gallery.html">Gallery</a>
+    <a href="#">Newsroom</a>
+    <a href="../chat/chat_ui.html" target="_blank">Messages</a>
+    <a href="#">Alumni Assist</a>
+    <a href="#">Members</a>
+  </nav>
+
+  <div class="wrap">
+    <div class="meta-row">
+      <div class="fund-info">
+        <h1 id="fund-title">Loading Fund...</h1>
+        <p class="subtitle" id="fund-desc"></p>
+      </div>
+      <div class="fund-stats hidden" id="fund-stats" aria-live="polite">
+        <span id="stat-goal">Goal: 0</span>
+        <span id="stat-raised">Raised: 0</span>
+        <span id="stat-contrib">Contributions: 0</span>
+      </div>
+    </div>
+
+    <div class="disabled-overlay" id="overlay">Loading…</div>
+
+    <form id="contribForm" novalidate>
+      <input type="hidden" name="fundId" id="fundId" />
+
+      <div>
+        <label for="amount">Amount (INR) <span class="req">*</span></label>
+        <input type="number" id="amount" name="amount" min="1" required placeholder="E.g. 1000" />
+        <div class="error-text" data-err="amount"></div>
+      </div>
+
+      <div>
+        <label for="transactionMode">Transaction Mode <span class="req">*</span></label>
+        <select id="transactionMode" name="transactionMode" required>
+          <option value="">Select</option>
+          <option value="online">Online</option>
+          <option value="upi">UPI</option>
+          <option value="netbanking">Net Banking</option>
+          <option value="card">Card</option>
+        </select>
+        <div class="error-text" data-err="transactionMode"></div>
+      </div>
+
+      <div>
+        <label for="firstName">First Name <span class="req">*</span></label>
+        <input id="firstName" name="firstName" required minlength="2" maxlength="50" />
+        <div class="error-text" data-err="firstName"></div>
+      </div>
+
+      <div>
+        <label for="lastName">Last Name <span class="req">*</span></label>
+        <input id="lastName" name="lastName" required maxlength="50" />
+        <div class="error-text" data-err="lastName"></div>
+      </div>
+
+      <div>
+        <label for="email">Email <span class="req">*</span></label>
+        <input id="email" name="email" type="email" required maxlength="120" />
+        <div class="error-text" data-err="email"></div>
+      </div>
+
+      <div>
+        <label for="phone">Contact Number <span class="req">*</span></label>
+        <input id="phone" name="phone" required placeholder="+91XXXXXXXXXX"
+               pattern="^(?:\\+?91[- ]?)?[6-9]\\d{9}$" />
+        <div class="error-text" data-err="phone"></div>
+      </div>
+
+      <div class="full">
+        <label for="street">Building No. & Street <span class="req">*</span></label>
+        <input id="street" name="street" required maxlength="120" />
+        <div class="error-text" data-err="street"></div>
+      </div>
+
+      <div>
+        <label for="locality">Locality <span class="req">*</span></label>
+        <input id="locality" name="locality" required maxlength="80" />
+        <div class="error-text" data-err="locality"></div>
+      </div>
+
+      <div>
+        <label for="city">City <span class="req">*</span></label>
+        <input id="city" name="city" required maxlength="60" />
+        <div class="error-text" data-err="city"></div>
+      </div>
+
+      <div>
+        <label for="state">State <span class="req">*</span></label>
+        <input id="state" name="state" required maxlength="60" />
+        <div class="error-text" data-err="state"></div>
+      </div>
+
+      <div>
+        <label for="country">Country <span class="req">*</span></label>
+        <input id="country" name="country" required value="India" maxlength="60" />
+        <div class="error-text" data-err="country"></div>
+      </div>
+
+      <div>
+        <label for="pincode">Pincode <span class="req">*</span></label>
+        <input id="pincode" name="pincode" required pattern="^[1-9][0-9]{5}$" />
+        <div class="error-text" data-err="pincode"></div>
+      </div>
+
+      <div class="full">
+        <label for="notes">Instructions / Notes (Optional)</label>
+        <textarea id="notes" name="notes" maxlength="500" placeholder="Any special instructions..."></textarea>
+        <div class="error-text" data-err="notes"></div>
+      </div>
+
+      <div class="full">
+        <label><input type="checkbox" id="anonymous" name="anonymous" /> Donate Anonymously</label>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn-primary" id="submitBtn">Contribute</button>
+        <button type="button" class="btn-text" id="cancelBtn">Cancel</button>
+        <div id="status" aria-live="polite"></div>
+      </div>
+    </form>
+
+    <section id="contrib-table-section" class="hidden" aria-labelledby="contribHeading">
+      <h2 id="contribHeading">Contributions</h2>
+      <div class="table-wrap">
+        <table id="contrib-table">
+          <thead>
+            <tr>
+              <th scope="col">When</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Mode</th>
+              <th scope="col">City</th>
+              <th scope="col">Pincode</th>
+              <th scope="col">Anonymous</th>
+            </tr>
+          </thead>
+          <tbody id="contrib-tbody">
+            <tr class="empty-row"><td colspan="8">No contributions yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="contribute.js"></script>
+</body>
+</html>
