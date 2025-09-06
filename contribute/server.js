@@ -1,39 +1,25 @@
-/**
- * server.js
- * Modified to integrate Razorpay test mode so that:
- *  - Form submit creates a Razorpay order & stores a pending contribution
- *  - ONLY after successful payment verification (signature) the actual
- *    Contribution is written and Fund totals updated.
- *
- * Install dependencies (if not already):
- *   npm i express mongoose cors razorpay
- *
- * ENV (example):
- *   PORT=5000
- *   MONGODB_URI=mongodb://127.0.0.1:27017/fundraisingDB
- *   RAZORPAY_KEY_ID=rzp_test_xxxxxxxxx
- *   RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxx
- */
-
 'use strict';
+
+/**
+ * server.js (no dotenv dependency)
+ * Run from project root:
+ *   node server.js
+ * Static files served from ./public
+ */
 
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const Razorpay = require('razorpay');
-const crypto = require('crypto');
 
 /* ------------- Config ------------- */
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/fundraisingDB';
-const RZP_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_key';
-const RZP_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'test_secret';
 
 /* ------------- App Setup ------------- */
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: '300kb' }));
+app.use(express.json({ limit: '250kb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -69,40 +55,13 @@ const contributionSchema = new mongoose.Schema({
   state:           { type: String, required: true },
   country:         { type: String, required: true },
   pincode:         { type: String, required: true },
-  transactionMode: { type: String, required: true },
+  transactionMode: { type: String, required: true, enum: ['online','upi','netbanking','card','cheque','cash'] },
   notes:           { type: String, maxlength: 500 },
   anonymous:       { type: Boolean, default: false }
 }, { timestamps: true });
 
-/**
- * PendingContribution is created at "order" creation time.
- * Only after successful verification do we promote it to a real Contribution.
- */
-const pendingContributionSchema = new mongoose.Schema({
-  fundId:          { type: mongoose.Schema.Types.ObjectId, ref: 'Fund', required: true, index: true },
-  amount:          { type: Number, required: true },
-  firstName:       String,
-  lastName:        String,
-  email:           String,
-  phone:           String,
-  street:          String,
-  locality:        String,
-  city:            String,
-  state:           String,
-  country:         String,
-  pincode:         String,
-  transactionMode: String,
-  notes:           String,
-  anonymous:       Boolean,
-  orderId:         { type: String, required: true, unique: true },
-  status:          { type: String, enum:['pending','succeeded','failed'], default:'pending' },
-  paymentId:       String,
-  signature:       String
-}, { timestamps: true });
-
 const Fund = mongoose.model('Fund', fundSchema);
 const Contribution = mongoose.model('Contribution', contributionSchema);
-const PendingContribution = mongoose.model('PendingContribution', pendingContributionSchema);
 
 /* ------------- Helpers ------------- */
 const asyncRoute = fn => (req,res,next)=>Promise.resolve(fn(req,res,next)).catch(next);
@@ -111,12 +70,6 @@ const isObjectId = id => /^[0-9a-fA-F]{24}$/.test(id);
 const emailRegex   = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const phoneRegex   = /^(?:\+?91[- ]?)?[6-9]\d{9}$/;
 const pincodeRegex = /^[1-9][0-9]{5}$/;
-
-/* ------------- Razorpay Instance ------------- */
-const razorpay = new Razorpay({
-  key_id: RZP_KEY_ID,
-  key_secret: RZP_KEY_SECRET
-});
 
 /* ------------- Seed (optional) ------------- */
 (async () => {
@@ -173,17 +126,8 @@ app.get('/api/fundraising/:id/contributions', asyncRoute(async (req,res) => {
   res.json(list);
 }));
 
-/* ------------- OLD Direct Contribution Endpoint (disabled) ------------- */
-app.post('/api/contributions', (_req,res) => {
-  return res.status(405).json({ message:'Direct contribution endpoint disabled. Use Razorpay payment flow.' });
-});
-
-/* ------------- Razorpay Payment Flow ------------- */
-/**
- * Create order & stage pending contribution
- * Body: full contribution form (fundId, amount, user details)
- */
-app.post('/api/payments/razorpay/create-order', asyncRoute(async (req,res) => {
+/* ------------- Contribution Routes ------------- */
+app.post('/api/contributions', asyncRoute(async (req,res) => {
   const b = req.body;
   const required = ['fundId','amount','firstName','lastName','email','phone','street','locality','city','state','country','pincode','transactionMode'];
   for (const f of required) {
@@ -192,6 +136,9 @@ app.post('/api/payments/razorpay/create-order', asyncRoute(async (req,res) => {
     }
   }
   if (!isObjectId(b.fundId)) return res.status(400).json({ message: 'Invalid fundId format' });
+
+  const amount = Number(b.amount);
+  if (!Number.isFinite(amount) || amount <= 0) return res.status(400).json({ message: 'Amount must be a positive number' });
   if (!emailRegex.test(b.email))   return res.status(400).json({ message: 'Invalid email format' });
   if (!phoneRegex.test(b.phone))   return res.status(400).json({ message: 'Invalid phone format' });
   if (!pincodeRegex.test(b.pincode)) return res.status(400).json({ message: 'Invalid pincode format' });
@@ -199,23 +146,9 @@ app.post('/api/payments/razorpay/create-order', asyncRoute(async (req,res) => {
   const fund = await Fund.findById(b.fundId);
   if (!fund) return res.status(404).json({ message: 'Fund not found' });
 
-  const amount = Number(b.amount);
-  if (!Number.isFinite(amount) || amount <= 0) return res.status(400).json({ message: 'Amount must be positive' });
-
-  // Optional cap so a single payment does not exceed remaining needed
-  const remaining = Math.max(0, fund.goal - fund.raised);
-  const finalAmount = remaining > 0 ? Math.min(amount, remaining) : amount;
-
-  const order = await razorpay.orders.create({
-    amount: Math.round(finalAmount * 100),
-    currency: 'INR',
-    receipt: 'fund_' + fund._id + '_' + Date.now(),
-    notes: { fundId: fund._id.toString() }
-  });
-
-  await PendingContribution.create({
+  const contribution = await Contribution.create({
     fundId: fund._id,
-    amount: finalAmount,
+    amount,
     firstName: b.firstName.trim(),
     lastName: b.lastName.trim(),
     email: b.email.trim(),
@@ -228,94 +161,20 @@ app.post('/api/payments/razorpay/create-order', asyncRoute(async (req,res) => {
     pincode: b.pincode,
     transactionMode: b.transactionMode,
     notes: b.notes,
-    anonymous: !!b.anonymous,
-    orderId: order.id
+    anonymous: !!b.anonymous
   });
 
-  res.json({
-    success:true,
-    orderId: order.id,
-    keyId: RZP_KEY_ID,
-    fundTitle: fund.title,
-    amount: finalAmount,
-    currency: order.currency
+  await Fund.updateOne({ _id: fund._id }, { $inc: { raised: amount, contributors: 1 } });
+
+  res.status(201).json({
+    message: 'Contribution saved',
+    contributionId: contribution._id
   });
 }));
 
-/**
- * Verify payment: Body { razorpay_order_id, razorpay_payment_id, razorpay_signature }
- * Steps:
- *  - Find pending contribution
- *  - Verify signature
- *  - Idempotent: if already succeeded respond success
- *  - Create actual Contribution, update Fund raised & contributors
- */
-app.post('/api/payments/razorpay/verify', asyncRoute(async (req,res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-  if(!razorpay_order_id || !razorpay_payment_id || !razorpay_signature){
-    return res.status(400).json({ message:'Missing verification fields' });
-  }
-
-  const pending = await PendingContribution.findOne({ orderId: razorpay_order_id });
-  if(!pending) return res.status(404).json({ message:'Pending contribution not found' });
-
-  if(pending.status === 'succeeded'){
-    // Idempotent return
-    const fund = await Fund.findById(pending.fundId);
-    return res.json({ success:true, raised: fund ? fund.raised : undefined, message:'Already processed' });
-  }
-
-  // Signature verification
-  const bodyStr = razorpay_order_id + '|' + razorpay_payment_id;
-  const expected = crypto
-    .createHmac('sha256', RZP_KEY_SECRET)
-    .update(bodyStr)
-    .digest('hex');
-
-  if(expected !== razorpay_signature){
-    pending.status = 'failed';
-    pending.paymentId = razorpay_payment_id;
-    pending.signature = razorpay_signature;
-    await pending.save();
-    return res.status(400).json({ message:'Invalid signature' });
-  }
-
-  const fund = await Fund.findById(pending.fundId);
-  if(!fund) return res.status(404).json({ message:'Fund disappeared' });
-
-  // Apply remaining check again to prevent overfunding
-  const remaining = Math.max(0, fund.goal - fund.raised);
-  const increment = remaining > 0 ? Math.min(pending.amount, remaining) : pending.amount;
-
-  // Create real contribution
-  await Contribution.create({
-    fundId: pending.fundId,
-    amount: increment,
-    firstName: pending.firstName,
-    lastName: pending.lastName,
-    email: pending.email,
-    phone: pending.phone,
-    street: pending.street,
-    locality: pending.locality,
-    city: pending.city,
-    state: pending.state,
-    country: pending.country,
-    pincode: pending.pincode,
-    transactionMode: pending.transactionMode || 'online',
-    notes: pending.notes,
-    anonymous: pending.anonymous
-  });
-
-  fund.raised += increment;
-  fund.contributors += 1;
-  await fund.save();
-
-  pending.status = 'succeeded';
-  pending.paymentId = razorpay_payment_id;
-  pending.signature = razorpay_signature;
-  await pending.save();
-
-  res.json({ success:true, raised: fund.raised, increment });
+app.get('/api/contributions', asyncRoute(async (_req,res) => {
+  const list = await Contribution.find().sort({ createdAt: -1 }).limit(200);
+  res.json(list);
 }));
 
 /* ------------- Health & Root ------------- */
@@ -333,5 +192,4 @@ app.use((err,_req,res,_next) => {
 /* ------------- Start ------------- */
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
-  console.log(`Razorpay Test Key: ${RZP_KEY_ID}`);
 });

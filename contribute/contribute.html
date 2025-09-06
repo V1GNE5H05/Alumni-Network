@@ -22,6 +22,7 @@
       background:var(--bg);
       color:#111;
     }
+    /* NAVBAR */
     nav {
       background: var(--accent);
       display:flex;
@@ -41,6 +42,7 @@
     }
     nav a:hover { text-decoration:underline; }
 
+    /* WRAPPER */
     .wrap {
       max-width:1100px;
       margin:40px auto 110px;
@@ -68,7 +70,9 @@
       gap:26px 40px;
     }
     form.compact { gap:22px 28px; }
-    form .full { grid-column:1 / -1; }
+    form .full {
+      grid-column:1 / -1;
+    }
     label {
       display:block;
       font-size:.72rem;
@@ -78,7 +82,10 @@
       text-transform:uppercase;
       color:#222;
     }
-    .req { color:#b45309; margin-left:4px; }
+    .req {
+      color:#b45309;
+      margin-left:4px;
+    }
     input, select, textarea {
       width:100%;
       font:inherit;
@@ -104,7 +111,10 @@
       letter-spacing:.4px;
       min-height:14px;
     }
-    .error-border { border-color:var(--err)!important; background:#fff5f5!important; }
+    .error-border {
+      border-color:var(--err)!important;
+      background:#fff5f5!important;
+    }
 
     .actions {
       grid-column:1 / -1;
@@ -167,7 +177,10 @@
       align-items:center;
       margin:0 0 38px;
     }
-    .fund-info { flex:1; min-width:260px; }
+    .fund-info {
+      flex:1;
+      min-width:260px;
+    }
     .fund-stats {
       font-size:.68rem;
       font-weight:600;
@@ -181,7 +194,10 @@
     }
     .fund-stats span { white-space:nowrap; }
 
-    #contrib-table-section { margin-top:70px; }
+    /* Contribution Table */
+    #contrib-table-section {
+      margin-top:70px;
+    }
     #contrib-table-section h2 {
       font-size:1.15rem;
       margin:0 0 14px;
@@ -199,7 +215,9 @@
       font-size:.78rem;
       min-width:900px;
     }
-    thead { background:#f7f9fb; }
+    thead {
+      background:#f7f9fb;
+    }
     th, td {
       padding:10px 12px;
       text-align:left;
@@ -212,9 +230,18 @@
       text-transform:uppercase;
       color:#333;
     }
-    tbody tr:last-child td { border-bottom:none; }
-    tbody tr:hover { background:#fafcff; }
-    .empty-row { text-align:center; font-style:italic; color:#666; }
+    tbody tr:last-child td {
+      border-bottom:none;
+    }
+    tbody tr:hover {
+      background:#fafcff;
+    }
+    .empty-row {
+      text-align:center;
+      font-style:italic;
+      color:#666;
+    }
+
     .hidden { display:none !important; }
 
     @media (max-width:920px) {
@@ -227,10 +254,9 @@
       .actions { justify-content:flex-start; }
     }
   </style>
-  <!-- Razorpay Checkout Script -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
+  <!-- NAV BAR -->
   <nav>
     <a href="../index.html">Home</a>
     <a href="../fund.html">Fundraising</a>
@@ -276,6 +302,8 @@
           <option value="upi">UPI</option>
           <option value="netbanking">Net Banking</option>
           <option value="card">Card</option>
+          <option value="cheque">Cheque</option>
+          <option value="cash">Cash</option>
         </select>
         <div class="error-text" data-err="transactionMode"></div>
       </div>
@@ -358,6 +386,7 @@
       </div>
     </form>
 
+    <!-- Contributions Table -->
     <section id="contrib-table-section" class="hidden" aria-labelledby="contribHeading">
       <h2 id="contribHeading">Contributions</h2>
       <div class="table-wrap">
@@ -382,6 +411,7 @@
     </section>
   </div>
 
+  <!-- External front-end logic (was previously inline) -->
   <script src="contribute.js"></script>
 </body>
 </html>

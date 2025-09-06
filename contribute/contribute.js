@@ -1,9 +1,9 @@
-// contribute.js - Razorpay payment flow that only updates DB AFTER successful payment verification.
+// contribute.js (dual origin: Live Server 5501, API 5000)
 const API_BASE = 'http://localhost:5000';
 
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(location.search);
-  const fundId = params.get('fundId') || params.get('fund'); // accept both names
+  const fundId = params.get('fundId');
   const providedTitle = params.get('title');
 
   const els = cacheEls();
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadContributions(fundId, els);
 
   els.cancelBtn.addEventListener('click', () => history.back());
-  els.form.addEventListener('submit', e => beginPaymentFlow(e, els));
+  els.form.addEventListener('submit', e => submitContribution(e, els));
 });
 
 function cacheEls() {
@@ -43,7 +43,6 @@ function cacheEls() {
   };
 }
 
-/* ------------ Load Fund & Contributions ----------- */
 async function loadFund(id, els) {
   els.overlay.style.display = 'flex';
   try {
@@ -94,7 +93,7 @@ function renderTable(list, els){
       <td>${Number(c.amount)}</td>
       <td>${name}</td>
       <td>${anon ? '—' : escapeHtml(c.email)}</td>
-      <td>${escapeHtml(c.transactionMode || 'online')}</td>
+      <td>${escapeHtml(c.transactionMode)}</td>
       <td>${escapeHtml(c.city)}</td>
       <td>${escapeHtml(c.pincode)}</td>
       <td>${anon ? 'Yes':'No'}</td>
@@ -102,14 +101,12 @@ function renderTable(list, els){
   }).join('');
 }
 
-/* ------------ Payment Flow ------------- */
-async function beginPaymentFlow(e, els){
+async function submitContribution(e, els){
   e.preventDefault();
   clearErrors();
   els.statusEl.textContent = '';
   const data = formDataToObject(new FormData(els.form));
   data.anonymous = els.form.anonymous.checked;
-  data.fundId = els.fundIdInput.value;
 
   const errs = validate(data);
   if (Object.keys(errs).length) {
@@ -121,88 +118,30 @@ async function beginPaymentFlow(e, els){
 
   try {
     toggleSubmitting(true, els);
-    els.statusEl.textContent = 'Creating payment order...';
-
-    // Create Razorpay order + stage contribution (pending)
-    const orderRes = await fetch(`${API_BASE}/api/payments/razorpay/create-order`, {
+    els.statusEl.textContent = 'Submitting...';
+    const r = await fetch(`${API_BASE}/api/contributions`, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify(data)
     });
-    const orderData = await orderRes.json().catch(()=>({}));
-    if(!orderRes.ok || !orderData.orderId){
-      throw new Error(orderData.message || 'Failed to create order');
-    }
+    const out = await r.json().catch(()=>({message:'Server error'}));
+    if (!r.ok) throw new Error(out.message || 'Submission failed');
+    els.statusEl.textContent = 'Thank you! Contribution recorded.';
+    els.statusEl.className = 'success';
 
-    els.statusEl.textContent = 'Opening payment popup...';
-
-    // Launch Razorpay checkout
-    const options = {
-      key: orderData.keyId,
-      amount: orderData.amount * 100,
-      currency: orderData.currency || 'INR',
-      name: 'Fund Contribution',
-      description: orderData.fundTitle,
-      order_id: orderData.orderId,
-      handler: async function (response){
-        els.statusEl.textContent = 'Verifying payment...';
-        try {
-          const verifyRes = await fetch(`${API_BASE}/api/payments/razorpay/verify`, {
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature
-            })
-          });
-          const verifyData = await verifyRes.json().catch(()=>({}));
-          if(!verifyRes.ok || !verifyData.success){
-            throw new Error(verifyData.message || 'Verification failed');
-          }
-          els.statusEl.textContent = 'Payment successful! Thank you.';
-          els.statusEl.className = 'success';
-          els.form.reset();
-          els.fundIdInput.value = data.fundId;
-          await loadFund(data.fundId, els);
-          await loadContributions(data.fundId, els);
-        } catch(err){
-          els.statusEl.textContent = err.message;
-          els.statusEl.className = 'fail';
-        } finally {
-          toggleSubmitting(false, els);
-        }
-      },
-      modal: {
-        ondismiss: () => {
-          els.statusEl.textContent = 'Payment cancelled.';
-          els.statusEl.className = 'fail';
-          toggleSubmitting(false, els);
-        }
-      },
-      prefill: {
-        name: data.firstName + ' ' + data.lastName,
-        email: data.email,
-        contact: data.phone
-      },
-      notes: { fundId: data.fundId, anonymous: data.anonymous ? 'yes':'no' },
-      theme: { color:'#1c08f8' }
-    };
-
-    if(typeof Razorpay === 'undefined'){
-      throw new Error('Razorpay script not loaded');
-    }
-    const rzp = new Razorpay(options);
-    rzp.open();
-
+    const fid = data.fundId;
+    els.form.reset();
+    els.fundIdInput.value = fid;
+    await loadFund(fid, els);
+    await loadContributions(fid, els);
   } catch(err){
     els.statusEl.textContent = err.message;
     els.statusEl.className = 'fail';
+  } finally {
     toggleSubmitting(false, els);
   }
 }
 
-/* ------------ Validation & Utils ------------- */
 function validate(d){
   const e = {};
   if(!d.fundId) e.fundId = 'Missing fund';
@@ -228,6 +167,7 @@ function clearErrors(){
   document.querySelectorAll('.error-text').forEach(e=>e.textContent='');
   document.querySelectorAll('.error-border').forEach(i=>i.classList.remove('error-border'));
 }
+
 function formDataToObject(fd){
   const obj = {};
   fd.forEach((v,k)=> obj[k] = typeof v === 'string' ? v.trim() : v);
@@ -235,7 +175,7 @@ function formDataToObject(fd){
 }
 function toggleSubmitting(is, els){
   [...els.form.elements].forEach(el => el.disabled = is);
-  if(els.submitBtn) els.submitBtn.textContent = is ? 'Processing...' : 'Contribute';
+  if(els.submitBtn) els.submitBtn.textContent = is ? 'Submitting...' : 'Contribute';
 }
 function disableForm(form){ [...form.elements].forEach(el => el.disabled = true); }
 function showError(msg, els){
