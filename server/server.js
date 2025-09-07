@@ -27,30 +27,31 @@ app.use(express.json({ limit: '250kb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// MongoDB native connection for students/posts/events
-const uri = "mongodb://localhost:27017";
-const client = new MongoClient(uri);
+
+// MongoDB Atlas connection string
+const ATLAS_URI = "mongodb+srv://vigneshkathirmani:Vignesh1105@alumni-network.iz9mqwz.mongodb.net/?retryWrites=true&w=majority&appName=alumni-network";
 const dbName = "alumni_network";
 const collectionName = "student";
+const client = new MongoClient(ATLAS_URI);
 let collection;
 async function connectDB() {
   try {
     await client.connect();
-    console.log("✅ Connected to MongoDB");
+    console.log("✅ Connected to MongoDB Atlas");
     const db = client.db(dbName);
     collection = db.collection(collectionName);
     app.locals.db = db;
   } catch (err) {
-    console.error("❌ MongoDB connection failed:", err);
+    console.error("❌ MongoDB Atlas connection failed:", err);
   }
 }
 connectDB();
 
-// Mongoose connection for fundraising/contributions
-const MONGO_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/fundraisingDB';
+// Mongoose connection for fundraising/contributions (Atlas)
+const MONGO_URI = ATLAS_URI;
 mongoose.connect(MONGO_URI, { autoIndex: true })
-  .then(() => console.log('✅ Mongoose connected:', MONGO_URI))
-  .catch(err => { console.error('❌ Mongoose error:', err); process.exit(1); });
+  .then(() => console.log('✅ Mongoose connected to Atlas:', MONGO_URI))
+  .catch(err => { console.error('❌ Mongoose Atlas error:', err); process.exit(1); });
 
 // Fundraising schemas
 const fundSchema = new mongoose.Schema({
@@ -166,6 +167,12 @@ app.get("/students", async (req, res) => {
 app.post("/student", async (req, res) => {
   try {
     const result = await collection.insertOne(req.body);
+    // Also add to users collection
+    const db = client.db(dbName);
+    const usersCollection = db.collection("users");
+    if (req.body.email) {
+      await usersCollection.insertOne({ email: req.body.email, password: req.body.email });
+    }
     res.json({ message: "Inserted successfully", id: result.insertedId });
   } catch (err) {
     res.status(500).json({ error: err.message });
