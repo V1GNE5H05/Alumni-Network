@@ -1,6 +1,6 @@
 
 function login() {
-    var userid = document.getElementById("username").value;
+    var identifier = document.getElementById("username").value;
     var password = document.getElementById("password").value;
 
     fetch("http://localhost:5000/login", {
@@ -8,12 +8,14 @@ function login() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email: userid, password: password })
+        body: JSON.stringify({ identifier: identifier, password: password })
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            if(userid == "admin") {
+            // Store identifier in sessionStorage
+            sessionStorage.setItem('loggedInUser', identifier);
+            if(identifier == "admin") {
                 window.location.href = "../admin/admin_portal.html";
             }
             else {

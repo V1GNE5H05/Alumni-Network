@@ -53,7 +53,7 @@
 
 const FundDelete = (() => {
   const DEFAULTS = {
-    apiBase: 'http://localhost:5000',
+  apiBase: 'http://localhost:5000',
     tbodySelector: '#fundTableBody',
     reloadBtnSelector: '#reloadFundsBtn',
     attachOnly: false,
@@ -120,7 +120,7 @@ const FundDelete = (() => {
       log('[DELETE] ID =', id);
 
       try {
-        const res = await fetch(cfg.apiBase + '/api/fundraising/' + encodeURIComponent(id), {
+  const res = await fetch(cfg.apiBase + '/api/fundraising/' + encodeURIComponent(id), {
           method: 'DELETE',
           headers: { 'Accept': 'application/json' }
         });
@@ -168,7 +168,7 @@ const FundDelete = (() => {
     if (!tbodyEl) return;
     tbodyEl.innerHTML = rowSpanHTML('Loading...', 7, '#444');
     try {
-      const res = await fetch(cfg.apiBase + '/api/fundraising', { headers: { 'Accept': 'application/json' } });
+  const res = await fetch(cfg.apiBase + '/api/fundraising', { headers: { 'Accept': 'application/json' } });
       if (!res.ok) throw new Error('Status ' + res.status);
       const list = await res.json();
       renderList(list);

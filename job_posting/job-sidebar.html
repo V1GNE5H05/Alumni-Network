@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Board Sidebar</title>
+  <link rel="stylesheet" href="job-sidebar.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <div class="top-header">
+    <div class="logo-title-row">
+      <a href="/home page/home_page.html"><img src="/images/clg_logo.png" alt="Mepco Schlenk Engineering College Logo" class="header-logo" /></a>
+    </div>
+    <div class="contact">
+      <label>📞+91-4562-235104,235120</label><br><br>
+      <label>✉️ msec@mepcoeng.ac.in</label>
+    </div>
+  </div>
+  <nav class="navbar">
+    <ul>
+      <a href="../chat/chat_ui.html"><li style="position: relative; left: 10px;">MESSAGES</li></a>
+      <a href="../alumni profile/alumni_profile.html"><li style="position: relative; left: 10px;">PROFILE</li></a>
+      <a href="#"><li style="position: relative; left: 10px;">MEMBERS</li></a><a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
+      <a href="../event page/event_page.html"><li>EVENTS</li></a>
+      <a href="../gallery/gallery.html"><li>GALLERY</li></a>
+      <a href="#"><li>ALUMNI ASSIST</li></a>
+      <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
+      <a href="#"><li style="position: relative; left: 290px;">ABOUT US</li></a>
+      <a href="../index.html"><li style="position: relative; left: 300px;">LOGOUT</li></a>
+    </ul>
+  </nav>
+  <!-- Top row with buttons -->
+  <div class="jobboard-topbar">
+    <button class="topbar-btn manage-btn">Manage Job Postings</button>
+    <button class="topbar-btn green-btn" onclick="window.location.href='post-job.html'">+ Post Job</button>
+    <button class="topbar-btn green-btn" onclick="window.location.href='post-internship.html'">+ Post Internship</button>
+  </div>
+
+  <div id="main-jobboard-content">
+    <div id="sidebar-container">
+      <div class="sidebar-list">
+        <div class="sidebar-section">
+          <div class="sidebar-item active" data-type="jobs">
+            <span class="icon">&#128188;</span>
+            <span>Jobs For You</span>
+          </div>
+          <div class="sidebar-item" data-type="jobs">
+            <span class="icon">&#128188;</span>
+            <span>Jobs</span>
+          </div>
+          
+          <div class="sidebar-item" data-type="internships">
+            <span class="icon">&#127891;</span>
+            <span>Internships</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-item sidebar-dropdown">
+            <span class="icon">&#128187;</span>
+            <span>Job Areas</span>
+            <span class="chevron">&#8250;</span>
+          </div>
+          <!-- Dynamic Job Areas -->
+          <div class="sidebar-dropdown-list" id="jobAreasList"></div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-item sidebar-dropdown">
+            <span class="icon">&#128161;</span>
+            <span>Skills</span>
+            <span class="chevron">&#8250;</span>
+          </div>
+          <!-- Dynamic Skills -->
+          <div class="sidebar-dropdown-list" id="skillsList"></div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-item sidebar-dropdown">
+            <span class="icon">&#127970;</span>
+            <span>Companies</span>
+            <span class="chevron">&#8250;</span>
+          </div>
+          <!-- Dynamic Companies -->
+          <div class="sidebar-dropdown-list" id="companiesList"></div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-item sidebar-dropdown">
+            <span class="icon">&#128205;</span>
+            <span>Locations</span>
+            <span class="chevron">&#8250;</span>
+          </div>
+          <!-- Dynamic Locations -->
+          <div class="sidebar-dropdown-list" id="locationsList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="jobs-list-panel" id="jobsListPanel"></div>
+  </div>
+
+  <script src="jobs-display.js"></script>
+</body>
+</html>

@@ -1,44 +1,10 @@
 
-<script>
-// Get the modal, image, and caption elements
-var modal = document.getElementById("image-modal");
-var modalImg = document.getElementById("zoomed-image");
-var captionText = document.getElementById("caption");
-var closeBtn = document.getElementsByClassName("close-btn")[0];
-
-// Get all images in the gallery
-var galleryItems = document.getElementsByClassName("gallery-item");
-
-// Loop through each image and add a click event listener
-for (var i = 0; i < galleryItems.length; i++) {
-  galleryItems[i].onclick = function() {
-    var img = this.getElementsByTagName("img")[0];
-    var caption = this.getElementsByTagName("p")[0];
-    
-    modal.style.display = "block";
-    modalImg.src = img.src;
-    captionText.innerHTML = caption.innerHTML;
-  }
-}
-
-// When the user clicks on the close button, hide the modal
-closeBtn.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal content, hide the modal
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
  <meta charset="UTF-8">
  <title>Mepco Gallery</title>
- 
+ <link rel="stylesheet" href="/home page/home_page.css">
  <style>
   /* Full height layout to push footer down */
   html, body {
@@ -56,24 +22,6 @@ window.onclick = function(event) {
    padding: 20px;
    color: white;
    text-align: center;
-  }
-
-  nav {
-   background-color: #104aa4;
-   display: flex;
-   justify-content: center;
-   padding: 10px;
-  }
-
-  nav a {
-   color: white;
-   text-decoration: none;
-   margin: 0 15px;
-   font-weight: bold;
-  }
-
-  nav a:hover {
-   text-decoration: underline;
   }
 
   .container {
@@ -188,25 +136,28 @@ window.onclick = function(event) {
  </style>
 </head>
 <body>
- <header>
-  <h1>MEPCO SCHLENK ENGINEERING COLLEGE</h1>
-  <p>Gallery Page</p>
- </header>
-
- <nav>
-    <a href="../index.html">Home</a>
-    <a href="../fund1/fund_raising.html">Fundraising</a>
-     <a href="../alumni profile/alumni_profile.html" target="_blank"><li style="position: relative; left: 10px;">PROFILE</li></a>
-     <a href="#">About Us</a>
-    <a href="#">Events</a>
-    <a href="../gallery/gallery.html">Gallery</a>
-     <a href="../event page/event_page.html" target="_blank"><li>EVENTS</li></a>
-    <a href="#">Newsroom</a>
-     <a href="../chat/chat_ui.html"><li style="position: relative; left: 10px;">MESSAGES</li></a>
-    <a href="#">Alumni Assist</a>
-    <a href="#">Members</a>
+  <div class="top-header">
+    <div class="logo-title-row">
+      <a href="/home page/home_page.html"><img src="/images/clg_logo.png" alt="Mepco Schlenk Engineering College Logo" class="header-logo" /></a>
+    </div>
+    <div class="contact">
+      <label>📞+91-4562-235104,235120</label><br><br>
+      <label>✉️ msec@mepcoeng.ac.in</label>
+    </div>
+  </div>
+  <nav class="navbar">
+    <ul>
+      <a href="../chat/chat_ui.html"><li style="position: relative; left: 10px;">MESSAGES</li></a>
+      <a href="../alumni profile/alumni_profile.html"><li style="position: relative; left: 10px;">PROFILE</li></a>
+      <a href="#"><li style="position: relative; left: 10px;">MEMBERS</li></a><a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
+      <a href="../event page/event_page.html"><li>EVENTS</li></a>
+      <a href="../gallery/gallery.html"><li>GALLERY</li></a>
+      <a href="#"><li>ALUMNI ASSIST</li></a>
+      <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
+      <a href="#"><li style="position: relative; left: 290px;">ABOUT US</li></a>
+      <a href="../index.html"><li style="position: relative; left: 300px;">LOGOUT</li></a>
+    </ul>
   </nav>
-
  <div class="container">
   <h2>Campus Gallery</h2>
   <div class="gallery-grid">

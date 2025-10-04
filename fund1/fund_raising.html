@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fundraising</title>
   <link rel="stylesheet" href="fund.css">
+  <link rel="stylesheet" href="/home page/home_page.css">
   <style>
     body {
       margin: 0;
@@ -56,27 +57,31 @@
     .contribute-btn:hover {
       background-color: #218838;
     }
-
-    /* OPTIONAL: if you decide later each card should span full width, just uncomment:
-    .fund-card { width: 100%; }
-    */
   </style>
 </head>
 <body>
-
-  <nav>
-    <a href="../index.html">Home</a>
-    <a href="#">Fundraising</a>
-    <a href="../alumni profile/alumni_profile.html" target="_blank"><li>PROFILE</li></a>
-    <a href="#">About Us</a>
-    <a href="../eventpage/event_page.html" target="_blank"><li>EVENTS</li></a>
-    <a href="../gallery/gallery.html">Gallery</a>
-    <a href="#">Newsroom</a>
-    <a href="../chat/chat_ui.html"><li>MESSAGES</li></a>
-    <a href="#">Alumni Assist</a>
-    <a href="#">Members</a>
+  <div class="top-header">
+    <div class="logo-title-row">
+     <a href="/home page/home_page.html"><img src="/images/clg_logo.png" alt="Mepco Schlenk Engineering College Logo" class="header-logo" /></a>
+    </div>
+    <div class="contact">
+      <label>📞+91-4562-235104,235120</label><br><br>
+      <label>✉️ msec@mepcoeng.ac.in</label>
+    </div>
+  </div>
+  <nav class="navbar">
+    <ul>
+      <a href="../chat/chat_ui.html"><li style="position: relative; left: 10px;">MESSAGES</li></a>
+      <a href="../alumni profile/alumni_profile.html"><li style="position: relative; left: 10px;">PROFILE</li></a>
+      <a href="#"><li style="position: relative; left: 10px;">MEMBERS</li></a><a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
+      <a href="../event page/event_page.html"><li>EVENTS</li></a>
+      <a href="../gallery/gallery.html"><li>GALLERY</li></a>
+      <a href="#"><li>ALUMNI ASSIST</li></a>
+      <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
+      <a href="#"><li style="position: relative; left: 290px;">ABOUT US</li></a>
+      <a href="../index.html"><li style="position: relative; left: 300px;">LOGOUT</li></a>
+    </ul>
   </nav>
-
   <div class="fund-container" id="fund-container">
     <!-- Cards from MongoDB -->
   </div>

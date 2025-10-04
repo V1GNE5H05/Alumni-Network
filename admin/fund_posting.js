@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     toggleSubmitting(true);
     try {
-      const res = await fetch(FUND_API_BASE + '/api/fundraising', {
+  const res = await fetch(FUND_API_BASE + '/api/fundraising', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, description, goal })
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('[DELETE DEBUG] Sending DELETE for id=', id);
 
     try {
-      const res = await fetch(FUND_API_BASE + '/api/fundraising/' + encodeURIComponent(id), {
+  const res = await fetch(FUND_API_BASE + '/api/fundraising/' + encodeURIComponent(id), {
         method: 'DELETE'
       });
 
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadFunds() {
     fundList.innerHTML = '<div style="padding:12px;font-size:.8rem;color:#555;">Loading funds...</div>';
     try {
-      const res = await fetch(FUND_API_BASE + '/api/fundraising');
+  const res = await fetch(FUND_API_BASE + '/api/fundraising');
       if (!res.ok) throw new Error('Failed to load funds. Status ' + res.status);
       const list = await res.json();
       renderFundList(list);

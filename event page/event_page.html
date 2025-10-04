@@ -5,21 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alumni Events</title>
     <link rel="stylesheet" href="event_page.css">
+    <link rel="stylesheet" href="/home page/home_page.css">
 </head>
 <body>
-     <nav>
-    <a href="../index.html">Home</a>
-    <a href="#">Fundraising</a>
-     <a href="../alumni profile/alumni_profile.html" target="_blank"><li style="position: relative; left: 10px;">PROFILE</li></a>
-     <a href="#">About Us</a>
-    <a href="#">Events</a>
-    <a href="../gallery/gallery.html">Gallery</a>
-     <a href="../event page/event_page.html" target="_blank"><li>EVENTS</li></a>
-    <a href="#">Newsroom</a>
-     <a href="chat/chat_ui.html"><li style="position: relative; left: 10px;">MESSAGES</li></a>
-    <a href="#">Alumni Assist</a>
-    <a href="#">Members</a>
+    <div class="top-header">
+    <div class="logo-title-row">
+      <a href="/home page/home_page.html"><img src="/images/clg_logo.png" alt="Mepco Schlenk Engineering College Logo" class="header-logo" /></a>
+    </div>
+    <div class="contact">
+      <label>📞+91-4562-235104,235120</label><br><br>
+      <label>✉️ msec@mepcoeng.ac.in</label>
+    </div>
+  </div>
+  <nav class="navbar">
+    <ul>
+      <a href="../chat/chat_ui.html"><li style="position: relative; left: 10px;">MESSAGES</li></a>
+      <a href="../alumni profile/alumni_profile.html"><li style="position: relative; left: 10px;">PROFILE</li></a>
+      <a href="#"><li style="position: relative; left: 10px;">MEMBERS</li></a><a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
+      <a href="../event page/event_page.html"><li>EVENTS</li></a>
+      <a href="../gallery/gallery.html"><li>GALLERY</li></a>
+      <a href="#"><li>ALUMNI ASSIST</li></a>
+      <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
+      <a href="#"><li style="position: relative; left: 290px;">ABOUT US</li></a>
+      <a href="../index.html"><li style="position: relative; left: 300px;">LOGOUT</li></a>
+    </ul>
   </nav>
+
     <div class="container">
         <header>
             <h1>Alumni Events</h1>
@@ -52,8 +63,8 @@
                 <label for="eventLocation">Location:</label>
                 <input type="text" id="eventLocation" name="eventLocation" required>
 
-                <label for="eventPoster">Poster URL:</label>
-                <input type="text" id="eventPoster" name="eventPoster" placeholder="https://example.com/poster.jpg">
+                <label for="eventPoster">Poster IMG:</label>
+                <input type="text" id="eventPoster" name="eventPoster">
 
                 <label for="eventDescription">Description:</label>
                 <textarea id="eventDescription" name="eventDescription" rows="4" required></textarea>

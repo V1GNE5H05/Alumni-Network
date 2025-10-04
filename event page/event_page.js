@@ -4,7 +4,6 @@ let eventsData = [
         date: "2024-12-15",
         time: "6:00 PM - 9:00 PM",
         location: "University Auditorium",
-        posterUrl: "https://placehold.co/600x400/007BFF/FFFFFF?text=Annual+Meetup",
         description: "Join us for a night of networking, reminiscing, and fun! Catch up with old friends and make new connections."
     },
     {
@@ -12,7 +11,6 @@ let eventsData = [
         date: "2024-10-28",
         time: "10:00 AM - 1:00 PM",
         location: "Online (Zoom)",
-        posterUrl: "https://placehold.co/600x400/FFA500/FFFFFF?text=Career+Workshop",
         description: "Learn from industry experts on how to advance your career and leverage your alumni network for growth."
     },
     {
@@ -20,7 +18,6 @@ let eventsData = [
         date: "2024-09-05",
         time: "9:00 AM - 5:00 PM",
         location: "University Sports Complex",
-        posterUrl: "https://placehold.co/600x400/28A745/FFFFFF?text=Sporting+Event",
         description: "A day of friendly competition and fun! Sign up for football, basketball, or just come to cheer."
     },
     {
@@ -28,7 +25,6 @@ let eventsData = [
         date: "2024-11-10",
         time: "7:00 PM - 8:30 PM",
         location: "Science Building, Room 201",
-        posterUrl: "https://placehold.co/600x400/6C757D/FFFFFF?text=Guest+Lecture",
         description: "An exclusive lecture by leading tech innovators. Q&A session and reception to follow."
     }
 ];
