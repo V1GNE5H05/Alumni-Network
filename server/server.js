@@ -26,7 +26,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 
 // General MongoDB connection string
-const url = "mongodb://localhost:27017";
+const url = "mongodb+srv://vigneshkathirmani:Vignesh1105@alumni-network.iz9mqwz.mongodb.net/?retryWrites=true&w=majority&appName=alumni-network";
 const dbName = "alumni_network";
 const collectionName = "student";
 const client = new MongoClient(url);
