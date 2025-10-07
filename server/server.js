@@ -369,11 +369,12 @@ app.delete("/student/:id", async (req, res) => {
 app.get('/api/fundraising', async (req, res) => {
   try {
     const funds = await fundsCollection.find().sort({ createdAt: -1 }).toArray();
-    // Map _id to id for frontend compatibility
-    const mappedFunds = funds.map(fund => {
-      const { _id, ...rest } = fund;
-      return { ...rest, id: _id?.toString() };
-    });
+    // Map _id to id, but keep _id for compatibility
+    const mappedFunds = funds.map(fund => ({
+      ...fund,
+      id: fund._id?.toString(),
+      _id: fund._id?.toString()
+    }));
     res.json(mappedFunds);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching funds' });
