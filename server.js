@@ -26,7 +26,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 
 // General MongoDB connection string
-const url = "mongodb+srv://vigneshkathirmani:Vignesh1105@alumni-network.iz9mqwz.mongodb.net/?retryWrites=true&w=majority&appName=alumni-network";
+const url = "mongodb://localhost:27017";
 const dbName = "alumni_network";
 const collectionName = "student";
 const client = new MongoClient(url);
@@ -369,7 +369,12 @@ app.delete("/student/:id", async (req, res) => {
 app.get('/api/fundraising', async (req, res) => {
   try {
     const funds = await fundsCollection.find().sort({ createdAt: -1 }).toArray();
-    res.json(funds);
+    // Map _id to id for frontend compatibility
+    const mappedFunds = funds.map(fund => {
+      const { _id, ...rest } = fund;
+      return { ...rest, id: _id?.toString() };
+    });
+    res.json(mappedFunds);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching funds' });
   }
