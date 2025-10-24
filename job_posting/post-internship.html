@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Post an Internship</title>
+  <link rel="stylesheet" href="job-sidebar.css" />
+  <style>
+    .intern-form-wrap {max-width:940px; margin:32px auto; background:#fff; border-radius:12px; box-shadow:0 4px 22px -12px #aaa;}
+    .intern-form-head {padding:28px 40px 0 40px;}
+    .intern-form-title {font-size:2em; font-weight:600; color:#23243d;}
+    .intern-form-desc {color:#888;font-size:1.13rem;}
+    .intern-form-card {padding:6px 40px 25px 40px;}
+    .form-row {display:flex; flex-direction:column; gap:6px; margin-bottom:0;}
+    label {color:#222; font-size:1em; font-weight:500;}
+    .req { color: #e22; }
+    input, select, textarea {width:100%;padding:9px 11px;font-size:1em;border:1px solid #d6dbe7;border-radius:6px;background:#f8fafd;box-sizing:border-box;margin-top:4px;}
+    input:focus, select:focus, textarea:focus {border-color:#1c08f8;outline:none;background:#fff;}
+    .form-help {font-size:.93em;color:#666;padding-top:2px;}
+    .form-submit-row {display:flex;align-items:center;gap:20px;margin-top:10px;}
+    .green-btn {background:#44c352;color:#fff;font-weight:500;border:none;border-radius:25px;padding:10px 30px;font-size:1.13em;cursor:pointer;transition:background .17s;}
+    .green-btn:hover {background:#38a243;}
+    #postInternMsg {font-size:1.04em;font-weight:500;min-width:170px;}
+    .back-link {color:#3e4a54;background:none;text-decoration:underline;font-size:1.11em;margin-right:0;margin-left:auto;padding:4px 0;border:none;cursor:pointer;}
+    @media (max-width:800px){.intern-form-card,.intern-form-head{padding:14px 7vw;}}
+  </style>
+</head>
+<body style="background:#f7f8f5;">
+  <div class="intern-form-wrap">
+    <div class="intern-form-head">
+      <span class="intern-form-title">Post an Internship</span>
+      <span class="intern-form-desc">Create an internship opportunity by filling in details</span>
+      <a href="job-sidebar.html" class="back-link">&laquo; Back to Job Board</a>
+      <button class="green-btn" style="float:right;margin-top:10px;" onclick="window.location.href='post-job.html'">+ Post Job</button>
+    </div>
+    <form id="postInternForm" class="intern-form-card" enctype="multipart/form-data">
+      <div class="form-row">
+        <label>Title <span class="req">*</span>
+          <input name="title" required>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Company Name <span class="req">*</span>
+          <input name="company" placeholder="Enter Company Name" required>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Company Website
+          <input name="companyWebsite" type="url" placeholder="https://">
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Duration
+          <input name="duration" placeholder="e.g. 3 months">
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Location
+          <input name="location" placeholder="Seperated locations by a Comma (,)">
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Contact Email <span class="req">*</span>
+          <input name="contactEmail" type="email" required>
+        </label>
+        <div class="form-help">
+          Applications to the opportunity shall be sent by email to the above address, if you are submitting the email address of a recruiter, please make sure you have the permission to do so.
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Job Area
+          <input name="jobArea" type="text">
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Skills relevant to the Opportunity
+          <input name="skills" placeholder="Comma separated">
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Stipend
+          <input name="stipend" type="text">
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Application Deadline
+          <input name="applicationDeadline" type="date">
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Description <span class="req">*</span>
+          <textarea name="description" rows="7" required></textarea>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Attach file
+          <input type="file" name="file" accept=".doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.pdf">
+        </label>
+        <div class="form-help">
+          (Allowed file types: doc, docx, ppt, pptx, xls, xlsx, zip, pdf)<br>
+          <span style="color:#e22;">*Before attaching a pdf document, please compress it using <a href="https://smallpdf.com/compress-pdf" target="_blank">smallpdf.com</a></span>
+        </div>
+      </div>
+      <div class="form-submit-row">
+        <button type="submit" class="green-btn">Post Internship</button>
+        <span id="postInternMsg"></span>
+        <a href="job-sidebar.html" style="margin-left:10px;text-decoration:underline;color:#888;">Cancel</a>
+      </div>
+    </form>
+  </div>
+  <script src="post-internship.js"></script>
+</body>
+</html>
