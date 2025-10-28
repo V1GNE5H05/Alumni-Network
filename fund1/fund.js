@@ -1,6 +1,6 @@
 // fund.js
 // If using Live Server on port 5501 and API on 5000:
-const API_BASE = 'http://localhost:5000';  // or 'http://127.0.0.1:5000'
+const API_BASE = window.API_BASE_URL || 'http://localhost:5000';  // or 'http://127.0.0.1:5000'
 
 document.addEventListener("DOMContentLoaded", initFunds);
 

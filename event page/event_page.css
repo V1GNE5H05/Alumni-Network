@@ -16,6 +16,17 @@
     font-family: 'Poppins', sans-serif;
 }
 
+html {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    background-color: var(--bg-color);
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--bg-color);
@@ -132,6 +143,77 @@ header p {
     object-fit: cover;
     display: block;
     transition: transform 0.5s ease;
+}
+
+.registration-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
+    z-index: 1;
+}
+
+.participant-count {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+.register-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(72, 187, 120, 0.2);
+    letter-spacing: 0.5px;
+}
+
+.register-btn:hover {
+    background: linear-gradient(135deg, #38a169, #2f855a);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(72, 187, 120, 0.3);
+}
+
+.cancel-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, #fc8181, #f56565);
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(245, 101, 101, 0.2);
+    letter-spacing: 0.5px;
+}
+
+.cancel-btn:hover {
+    background: linear-gradient(135deg, #f56565, #e53e3e);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(245, 101, 101, 0.3);
 }
 
 .event-date-badge {

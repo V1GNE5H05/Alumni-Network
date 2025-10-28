@@ -5,11 +5,18 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   line-height: 1.6;
-  background: #f9f9fb;
-  color: #333;
+  background: var(--bg-primary, #f9f9fb);
+  color: var(--text-secondary, #333);
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Navbar */
@@ -97,10 +104,10 @@ body {
 }
 
 .info-card {
-  background: #fff;
+  background: var(--card-bg, #fff);
   padding: 2rem;
   border-radius: 15px;
-  box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md, 0px 4px 15px rgba(0,0,0,0.1));
   transition: transform 0.3s ease;
 }
 
@@ -110,7 +117,7 @@ body {
 
 .info-card h3 {
   margin-bottom: 1rem;
-  color: #004080;
+  color: var(--accent-color, #004080);
 }
 
 /* Footer */

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends - Alumni Portal</title>
+    <link rel="stylesheet" href="friends.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top Header -->
+    <div class="top-header">
+        <div class="logo-title-row">
+            <a href="#"><img src="../images/clg_logo.png" alt="Mepco Schlenk Engineering College Logo" class="header-logo" /></a>
+        </div>
+        <div class="contact">
+            <label>📞+91-4562-235104,235120</label><br><br>
+            <label>✉️ msec@mepcoeng.ac.in</label>
+        </div>
+    </div>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <ul>
+            <a href="../alumni profile/alumni_profile.html"><li style="position: relative; left: 10px;">PROFILE</li></a>
+            <a href="friends.html"><li style="position: relative; left: 10px;">FRIENDS</li></a>
+            <a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
+            <a href="../event page/event_page.html"><li>EVENTS</li></a>
+            <a href="../gallery/gallery.html"><li>GALLERY</li></a>
+            <a href="../proudable_alumni/proudable_alumni.html"><li>PROUDABLE ALUMNI</li></a>
+            <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
+            <a href="#"><li class="nav-right">ABOUT US</li></a>
+            <a href="../index.html"><li class="nav-right">LOGOUT</li></a>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar: Friends List -->
+        <aside class="friends-sidebar">
+            <div class="sidebar-header">
+                <h2>My Friends</h2>
+                <button id="add-friends-btn" class="btn-primary">
+                    <i class="fas fa-user-plus"></i> Add Friends
+                </button>
+            </div>
+            
+            <!-- Invitations Badge -->
+            <div id="invitations-badge" class="invitations-section" style="display: none;">
+                <button id="view-invitations-btn" class="btn-invitations">
+                    <i class="fas fa-envelope"></i> 
+                    <span>Pending Invitations</span>
+                    <span class="badge" id="invitations-count">0</span>
+                </button>
+            </div>
+
+            <!-- Friends List -->
+            <div class="friends-list" id="friends-list">
+                <p class="empty-state">No friends yet. Start adding friends!</p>
+            </div>
+        </aside>
+
+        <!-- Right Panel: Chat / Add Friends / Invitations -->
+        <div class="main-panel">
+            <!-- Chat View -->
+            <div id="chat-view" class="panel-view">
+                <div class="chat-header">
+                    <div class="chat-user-info">
+                        <div class="avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h3 id="chat-friend-name">Select a friend to chat</h3>
+                            <p id="chat-friend-status" class="status-text"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-messages" id="chat-messages">
+                    <div class="welcome-message">
+                        <i class="fas fa-comments"></i>
+                        <p>Select a friend from the sidebar to start chatting</p>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container" id="chat-input-container" style="display: none;">
+                    <input type="text" id="message-input" placeholder="Type your message...">
+                    <button id="send-message-btn" class="btn-send">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add Friends View -->
+            <div id="add-friends-view" class="panel-view" style="display: none;">
+                <div class="view-header">
+                    <h2>Add Friends</h2>
+                    <button id="close-add-friends" class="btn-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-container">
+                    <input type="text" id="filter-name" placeholder="Search by name...">
+                    <select id="filter-batch">
+                        <option value="">All Batches</option>
+                    </select>
+                    <select id="filter-department">
+                        <option value="">All Departments</option>
+                    </select>
+                    <button id="apply-filters-btn" class="btn-filter">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                    <button id="clear-filters-btn" class="btn-clear">
+                        <i class="fas fa-times-circle"></i> Clear
+                    </button>
+                </div>
+
+                <!-- Alumni List -->
+                <div class="alumni-list" id="alumni-list">
+                    <p class="loading-text">Loading alumni...</p>
+                </div>
+            </div>
+
+            <!-- Invitations View -->
+            <div id="invitations-view" class="panel-view" style="display: none;">
+                <div class="view-header">
+                    <h2>Friend Invitations</h2>
+                    <button id="close-invitations" class="btn-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="invitations-list" id="invitations-list">
+                    <p class="loading-text">Loading invitations...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="friends.js"></script>
+</body>
+</html>

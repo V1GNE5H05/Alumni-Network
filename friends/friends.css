@@ -1,0 +1,750 @@
+/* Reset and Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    overflow-x: hidden;
+    max-width: 100vw;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* CSS Variables for Dark Mode */
+:root {
+    --bg-color: #0a0a0a;
+    --text-color: #ffffff;
+    --navbar-bg: #1651a7;
+    --sidebar-bg: #1a1a1a;
+    --panel-bg: #1a1a1a;
+    --card-bg: #252525;
+    --hover-bg: #2a2a2a;
+    --border-color: #333;
+    --primary-color: #4a90e2;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --input-bg: #2a2a2a;
+    --input-border: #444;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --bg-secondary: #1a1a1a;
+}
+
+/* Light Mode Variables */
+body[data-theme="light"] {
+    --bg-color: #ffffff;
+    --text-color: #24292f;
+    --navbar-bg: #1651a7;
+    --sidebar-bg: #f6f8fa;
+    --panel-bg: #f6f8fa;
+    --card-bg: #ffffff;
+    --hover-bg: #eaeef2;
+    --border-color: #d0d7de;
+    --primary-color: #0969da;
+    --success-color: #1a7f37;
+    --danger-color: #cf222e;
+    --warning-color: #9a6700;
+    --input-bg: #ffffff;
+    --input-border: #d0d7de;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --bg-secondary: #f6f8fa;
+}
+
+/* Top Header */
+.top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    border-bottom: 1px solid var(--border-color);
+    height: 80px;
+    background: var(--bg-secondary);
+    max-width: 100%;
+}
+
+.logo-title-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.header-logo {
+    width: 260px;
+    height: 50px;
+}
+
+.contact {
+    color: #1651a7;
+    font-weight: 500;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+/* Navigation Bar */
+.navbar {
+    background: var(--navbar-bg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 24px;
+    display: flex;
+    height: 48px;
+    align-items: center;
+    gap: 36px;
+    flex-wrap: wrap;
+}
+
+.navbar li {
+    color: #fff;
+    font-size: 1.08em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: color 0.2s;
+    white-space: nowrap;
+}
+
+.navbar li:hover {
+    color: #ffd700;
+}
+
+.navbar li.nav-right {
+    margin-left: auto;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Main Container */
+.main-container {
+    display: flex;
+    height: calc(100vh - 128px);
+    max-width: 100vw;
+}
+
+/* Friends Sidebar */
+.friends-sidebar {
+    width: 320px;
+    background: var(--sidebar-bg);
+    border-right: 2px solid var(--border-color);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.sidebar-header h2 {
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background: #3a7bc8;
+    transform: translateY(-2px);
+}
+
+/* Invitations Section */
+.invitations-section {
+    padding: 15px 20px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.btn-invitations {
+    width: 100%;
+    padding: 12px;
+    background: var(--warning-color);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.btn-invitations:hover {
+    background: #e0a800;
+    transform: translateY(-2px);
+}
+
+.badge {
+    background: var(--danger-color);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+/* Friends List */
+.friends-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.friend-item {
+    padding: 15px;
+    background: var(--card-bg);
+    margin-bottom: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.friend-item:hover {
+    background: var(--hover-bg);
+    transform: translateX(5px);
+}
+
+.friend-item.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.friend-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.friend-info {
+    flex: 1;
+    overflow: hidden;
+}
+
+.friend-name {
+    font-weight: 600;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.friend-status {
+    font-size: 13px;
+    opacity: 0.8;
+    margin-top: 3px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+    font-size: 14px;
+}
+
+/* Main Panel */
+.main-panel {
+    flex: 1;
+    background: var(--panel-bg);
+    overflow: hidden;
+    position: relative;
+}
+
+.panel-view {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Chat View */
+.chat-header {
+    padding: 20px;
+    background: var(--card-bg);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.chat-user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+}
+
+.chat-user-info h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.status-text {
+    font-size: 13px;
+    color: #888;
+    margin-top: 3px;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.welcome-message {
+    text-align: center;
+    padding: 100px 20px;
+    color: #888;
+}
+
+.welcome-message i {
+    font-size: 64px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.welcome-message p {
+    font-size: 16px;
+}
+
+.message {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    word-wrap: break-word;
+}
+
+.message.sent {
+    background: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.message.received {
+    background: var(--card-bg);
+    color: var(--text-color);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.message-time {
+    font-size: 11px;
+    opacity: 0.7;
+    margin-top: 5px;
+}
+
+.chat-input-container {
+    padding: 20px;
+    background: var(--card-bg);
+    border-top: 2px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+}
+
+#message-input {
+    flex: 1;
+    padding: 12px 16px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 25px;
+    color: var(--text-color);
+    font-size: 14px;
+    outline: none;
+}
+
+#message-input:focus {
+    border-color: var(--primary-color);
+}
+
+.btn-send {
+    width: 45px;
+    height: 45px;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.btn-send:hover {
+    background: #3a7bc8;
+    transform: scale(1.1);
+}
+
+/* View Header */
+.view-header {
+    padding: 20px;
+    background: var(--card-bg);
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.view-header h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.btn-close {
+    width: 40px;
+    height: 40px;
+    background: var(--danger-color);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.btn-close:hover {
+    background: #c82333;
+    transform: rotate(90deg);
+}
+
+/* Filters */
+.filters-container {
+    padding: 20px;
+    background: var(--card-bg);
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filters-container input,
+.filters-container select {
+    flex: 1;
+    min-width: 150px;
+    padding: 10px 14px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    color: var(--text-color);
+    font-size: 14px;
+    outline: none;
+}
+
+.filters-container input:focus,
+.filters-container select:focus {
+    border-color: var(--primary-color);
+}
+
+.btn-filter,
+.btn-clear {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.btn-filter {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-filter:hover {
+    background: #3a7bc8;
+}
+
+.btn-clear {
+    background: var(--danger-color);
+    color: white;
+}
+
+.btn-clear:hover {
+    background: #c82333;
+}
+
+/* Alumni List */
+.alumni-list,
+.invitations-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+    align-content: start;
+}
+
+.alumni-card,
+.invitation-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 25px 20px;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.alumni-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px var(--shadow);
+}
+
+.alumni-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.alumni-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.alumni-subheading {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.alumni-info {
+    font-size: 13px;
+    color: #888;
+}
+
+.alumni-details {
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.alumni-details p {
+    margin: 5px 0;
+}
+
+.btn-invite,
+.btn-accept,
+.btn-reject {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-invite {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-invite:hover:not(:disabled) {
+    background: #3a7bc8;
+}
+
+.btn-invite:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-accept {
+    background: var(--success-color);
+    color: white;
+    margin-bottom: 8px;
+}
+
+.btn-accept:hover {
+    background: #218838;
+}
+
+.btn-reject {
+    background: var(--danger-color);
+    color: white;
+}
+
+.btn-reject:hover {
+    background: #c82333;
+}
+
+/* Invitation Card */
+.invitation-card {
+    border-left: 4px solid var(--warning-color);
+}
+
+.invitation-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.invitation-time {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.invitation-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.invitation-actions button {
+    flex: 1;
+}
+
+/* Loading States */
+.loading-text {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+    font-size: 14px;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px var(--shadow);
+    transition: var(--transition);
+    z-index: 9999;
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+    background: var(--primary-hover);
+    box-shadow: 0 6px 16px var(--shadow);
+}
+
+.dark-mode-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .friends-sidebar {
+        width: 100%;
+        max-height: 40vh;
+        border-right: none;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .alumni-list,
+    .invitations-list {
+        grid-template-columns: 1fr;
+    }
+}

@@ -6,6 +6,7 @@
         <title>Alumni profile</title>
         <link rel="stylesheet" href="alumni_profile.css">
         <link rel="stylesheet" href="/home page/home_page.css">
+        <link rel="stylesheet" href="../dark-mode.css">
 </head>
 <body>
     <div class="top-header">
@@ -19,12 +20,11 @@
   </div>
   <nav class="navbar">
     <ul>
-      <a href="../chat/chat_ui.html"><li style="position: relative; left: 10px;">MESSAGES</li></a>
       <a href="../alumni profile/alumni_profile.html"><li style="position: relative; left: 10px;">PROFILE</li></a>
-      <a href="#"><li style="position: relative; left: 10px;">MEMBERS</li></a><a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
+      <a href="../friends/friends.html"><li style="position: relative; left: 10px;">FRIENDS</li></a><a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
       <a href="../event page/event_page.html"><li>EVENTS</li></a>
       <a href="../gallery/gallery.html"><li>GALLERY</li></a>
-      <a href="#"><li>ALUMNI ASSIST</li></a>
+      <a href="../proudable_alumni/proudable_alumni.html"><li>PROUDABLE ALUMNI</li></a>
       <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
       <a href="#"><li style="position: relative; left: 290px;">ABOUT US</li></a>
       <a href="../index.html"><li style="position: relative; left: 300px;">LOGOUT</li></a>
@@ -41,6 +41,9 @@
                     </div>
                     <div class="menu">
                         <label id="updatePasswordBtn" style="cursor:pointer;">Update Password</label>
+                    </div>
+                    <div class="menu">
+                        <label id="myEventsBtn" style="cursor:pointer;">My Events</label>
                     </div>
                     <div class="menu">
                         <a href="../index.html"><label>Logout</label></a>
@@ -83,40 +86,91 @@
                             <div><label class="details-header">Designation : </label> <input type="text" class="details" id="edit_designation"></div><br>
                             <div><label class="details-header">Company : </label> <input type="text" class="details" id="edit_company"></div><br>
                         </div>
-                    </form>
-                    <!-- Update Password Form (hidden by default) -->
-                    <form id="updatePasswordForm" style="display:none;margin:auto;margin-top:30px;width:60%;max-width:700px;min-width:340px;border:1px solid #3498db;padding:40px 0 40px 0;background:#fff;border-radius:2px;">
-                        <h2 style="text-align:center;font-family:Times New Roman,serif;font-size:2rem;margin-bottom:30px;">Change Password</h2>
-                        <div style="display:flex;flex-direction:column;align-items:center;gap:24px;">
-                            <div style="display:flex;align-items:center;gap:40px;">
-                                <label style="font-size:1.2rem;font-family:Times New Roman,serif;width:200px;text-align:right;">Old Password</label>
-                                <input type="password" id="oldPassword" name="oldPassword" style="width:250px;height:28px;font-size:1rem;" required>
-                            </div>
-                            <div style="display:flex;align-items:center;gap:40px;">
-                                <label style="font-size:1.2rem;font-family:Times New Roman,serif;width:200px;text-align:right;">New Password</label>
-                                <input type="password" id="newPassword" name="newPassword" style="width:250px;height:28px;font-size:1rem;" required>
-                            </div>
-                            <div style="display:flex;align-items:center;gap:40px;">
-                                <label style="font-size:1.2rem;font-family:Times New Roman,serif;width:200px;text-align:right;">Confirm New Password</label>
-                                <input type="password" id="confirmPassword" name="confirmPassword" style="width:250px;height:28px;font-size:1rem;" required>
-                            </div>
-                            <button type="submit" style="margin-top:18px;padding:6px 22px;font-size:1.1rem;font-family:Times New Roman,serif;">Change Password</button>
-                            <div id="passwordMsg" style="margin-top:10px;font-size:1rem;color:#c0392b;"></div>
+                        <div style="display:flex;gap:14px;align-items:center;margin-top:10px;">
+                            <button type="submit" style="padding:6px 20px;">Save Changes</button>
+                            <button type="button" id="cancelEditBtn" style="padding:6px 20px;background:#ccc;border:1px solid #aaa;">Cancel</button>
+                            <span id="editProfileMsg" style="font-size:0.9rem;color:#1651a7;"></span>
                         </div>
                     </form>
+                    <!-- Update Password Form (hidden by default) -->
+                    <form id="updatePasswordForm" class="password-change-form" style="display:none;">
+                        <div class="password-form-container">
+                            <div class="password-form-left">
+                                <h2 class="password-form-title">Change<br>Password</h2>
+                                
+                                <div class="password-input-group">
+                                    <label class="password-label">Old Password</label>
+                                    <div class="password-input-wrapper">
+                                        <input type="password" id="oldPassword" name="oldPassword" class="password-input" placeholder="Enter old password" required>
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('oldPassword', this)">👁️</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="password-input-group">
+                                    <label class="password-label">New Password</label>
+                                    <div class="password-input-wrapper">
+                                        <input type="password" id="newPassword" name="newPassword" class="password-input" placeholder="Enter new password" required>
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('newPassword', this)">👁️</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="password-input-group">
+                                    <label class="password-label">Confirm New Password</label>
+                                    <div class="password-input-wrapper">
+                                        <input type="password" id="confirmPassword" name="confirmPassword" class="password-input" placeholder="Confirm new password" required>
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirmPassword', this)">👁️</button>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="password-submit-btn">Change Password</button>
+                                <button type="button" id="cancelPasswordBtn" class="password-cancel-btn">Back to Profile</button>
+                                <div id="passwordMsg" class="password-message"></div>
+                            </div>
+                            
+                            <div class="password-form-right">
+                                <div class="profile-avatar-circle">
+                                    <svg class="avatar-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="8" r="4" fill="currentColor"/>
+                                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- My Events Section (hidden by default) -->
+                    <div id="myEventsSection" style="display:none;">
+                        <h2 style="margin-bottom:25px;color:#1651a7;font-size:2rem;">My Registered Events</h2>
+                        <div id="myEventsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:25px;">
+                            <div style="grid-column:1/-1;text-align:center;padding:30px;color:#888;">Loading events...</div>
+                        </div>
+                    </div>
                     <div style="height: max-content;">
                         <img src="../images/user.png" alt="alumni image">
                     </div>
                 </div>
             </div>
         </div>
+        <script src="../config.js"></script>
         <script src="alumni_profile.js"></script>
         <script>
+        // Toggle password visibility
+        function togglePasswordVisibility(inputId, button) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+        
         // Show profile view and hide all forms when Profile is clicked
         document.querySelector('.left-bar .menu label').onclick = function() {
             document.getElementById('profileView').style.display = 'flex';
             document.getElementById('editProfileForm').style.display = 'none';
             document.getElementById('updatePasswordForm').style.display = 'none';
+            document.getElementById('myEventsSection').style.display = 'none';
         };
         // Toggle edit profile form
         document.getElementById('editProfileBtn').onclick = function() {
@@ -124,6 +178,7 @@
             document.getElementById('editProfileForm').style.display = 'block';
             document.getElementById('updatePasswordForm').style.display = 'none';
             document.getElementById('profileView').style.display = 'none';
+            document.getElementById('myEventsSection').style.display = 'none';
             // Fill form with current values
             document.getElementById('edit_name').value = document.getElementById('alumni_name').textContent;
             document.getElementById('edit_gender').value = document.getElementById('alumni_gender').textContent;
@@ -191,7 +246,121 @@
         document.getElementById('updatePasswordBtn').onclick = function() {
             document.getElementById('editProfileForm').style.display = 'none';
             document.getElementById('profileView').style.display = 'none';
-            document.getElementById('updatePasswordForm').style.display = 'block';
+            document.getElementById('updatePasswordForm').style.display = 'flex';
+            document.getElementById('myEventsSection').style.display = 'none';
+            document.getElementById('passwordMsg').textContent = '';
+            document.getElementById('passwordMsg').className = 'password-message';
+        };
+        
+        // Toggle My Events section
+        document.getElementById('myEventsBtn').onclick = function() {
+            document.getElementById('editProfileForm').style.display = 'none';
+            document.getElementById('profileView').style.display = 'none';
+            document.getElementById('updatePasswordForm').style.display = 'none';
+            document.getElementById('myEventsSection').style.display = 'block';
+            loadMyEvents();
+        };
+        
+        // Load user's registered events
+        async function loadMyEvents() {
+            const grid = document.getElementById('myEventsGrid');
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#888;">Loading events...</div>';
+            
+            try {
+                const alumniData = JSON.parse(localStorage.getItem('alumni_data') || '{}');
+                const alumniId = alumniData.alumniId || sessionStorage.getItem('loggedInUser');
+                
+                if (!alumniId) {
+                    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#e53e3e;">Unable to load alumni ID</div>';
+                    return;
+                }
+                
+                const res = await fetch(`${API_BASE_URL}/api/events`);
+                const allEvents = await res.json();
+                
+                // Filter events where this alumni is registered
+                const myEvents = allEvents.filter(event => 
+                    event.participants && event.participants.some(p => p.alumniId === alumniId)
+                );
+                
+                if (myEvents.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column:1/-1;text-align:center;padding:50px;">
+                            <div style="font-size:4rem;margin-bottom:15px;opacity:0.3;">📅</div>
+                            <h3 style="color:#666;margin-bottom:10px;">No Registered Events</h3>
+                            <p style="color:#999;">You haven't registered for any events yet.</p>
+                            <a href="../event page/event_page.html" style="display:inline-block;margin-top:20px;padding:10px 25px;background:#1651a7;color:white;text-decoration:none;border-radius:8px;">Browse Events</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                grid.innerHTML = myEvents.map(event => `
+                    <div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.1);transition:transform 0.3s ease;">
+                        <div style="position:relative;height:180px;overflow:hidden;">
+                            <img src="${event.posterUrl}" alt="${event.title}" style="width:100%;height:100%;object-fit:cover;">
+                            <div style="position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#48bb78,#38a169);color:white;padding:6px 12px;border-radius:15px;font-size:0.8rem;font-weight:600;">✓ Registered</div>
+                        </div>
+                        <div style="padding:20px;">
+                            <h3 style="color:#1651a7;margin-bottom:12px;font-size:1.3rem;">${event.title}</h3>
+                            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:15px;color:#666;font-size:0.9rem;">
+                                <div>📅 ${event.date}</div>
+                                <div>🕐 ${event.time || 'TBA'}</div>
+                                <div>📍 ${event.location}</div>
+                            </div>
+                            <p style="color:#666;line-height:1.6;margin-bottom:15px;">${event.description.substring(0, 100)}${event.description.length > 100 ? '...' : ''}</p>
+                            <div style="display:flex;gap:10px;">
+                                <button onclick="cancelEventFromProfile('${event._id}')" style="flex:1;padding:10px;background:linear-gradient(135deg,#fc8181,#f56565);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:500;">Cancel Registration</button>
+                                <a href="../event page/event_page.html" style="flex:1;padding:10px;background:#e2e8f0;color:#4a5568;text-decoration:none;border-radius:8px;text-align:center;font-weight:500;">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading events:', error);
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#e53e3e;">Error loading events</div>';
+            }
+        }
+        
+        // Cancel event registration from profile
+        async function cancelEventFromProfile(eventId) {
+            if (!confirm('Are you sure you want to cancel your registration for this event?')) {
+                return;
+            }
+            
+            try {
+                const alumniData = JSON.parse(localStorage.getItem('alumni_data') || '{}');
+                const alumniId = alumniData.alumniId || sessionStorage.getItem('loggedInUser');
+                
+                const res = await fetch(`${API_BASE_URL}/api/events/${eventId}/cancel`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ alumniId })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    alert('✅ ' + data.message);
+                    loadMyEvents(); // Refresh the list
+                } else {
+                    alert('❌ ' + data.message);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        // Cancel password form
+        document.getElementById('cancelPasswordBtn').onclick = function() {
+            document.getElementById('updatePasswordForm').style.display = 'none';
+            document.getElementById('profileView').style.display = 'flex';
+            document.getElementById('passwordMsg').textContent = '';
+            document.getElementById('passwordMsg').className = 'password-message';
+            document.getElementById('oldPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
         };
         // Hide password form and return to profile after submit
         document.getElementById('updatePasswordForm').onsubmit = async function(e) {
@@ -200,7 +369,7 @@
             const newPassword = document.getElementById('newPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             const msg = document.getElementById('passwordMsg');
-            msg.style.color = '#c0392b';
+            msg.className = 'password-message error';
             if (newPassword !== confirmPassword) {
                 msg.textContent = 'New passwords do not match.';
                 return;
@@ -217,20 +386,22 @@
             });
             const data = await res.json();
             if (res.ok) {
-                msg.style.color = '#27ae60';
-                msg.textContent = 'Password changed successfully!';
+                msg.className = 'password-message success';
+                msg.textContent = '✓ Password changed successfully!';
                 setTimeout(() => {
                     document.getElementById('updatePasswordForm').style.display = 'none';
                     document.getElementById('profileView').style.display = 'flex';
                     msg.textContent = '';
+                    msg.className = 'password-message';
                     document.getElementById('oldPassword').value = '';
                     document.getElementById('newPassword').value = '';
                     document.getElementById('confirmPassword').value = '';
-                }, 1200);
+                }, 1500);
             } else {
                 msg.textContent = data.message || 'Password change failed.';
             }
         };
         </script>
+        <script src="../dark-mode.js"></script>
     </body>
 </html>

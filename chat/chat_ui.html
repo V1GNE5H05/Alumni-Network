@@ -6,6 +6,7 @@
     <title>Alumni Messenger</title>
     <link rel="stylesheet" href="chat_ui.css">
     <link rel="stylesheet" href="/home page/home_page.css">
+    <link rel="stylesheet" href="../dark-mode.css">
 </head>
 <body>
     <div class="top-header">
@@ -21,10 +22,10 @@
     <ul>
       <a href="../chat/chat_ui.html"><li style="position: relative; left: 10px;">MESSAGES</li></a>
       <a href="../alumni profile/alumni_profile.html"><li style="position: relative; left: 10px;">PROFILE</li></a>
-      <a href="#"><li style="position: relative; left: 10px;">MEMBERS</li></a><a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
+      <a href="../friends/friends.html"><li style="position: relative; left: 10px;">FRIENDS</li></a><a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
       <a href="../event page/event_page.html"><li>EVENTS</li></a>
       <a href="../gallery/gallery.html"><li>GALLERY</li></a>
-      <a href="#"><li>ALUMNI ASSIST</li></a>
+      <a href="../proudable_alumni/proudable_alumni.html"><li>PROUDABLE ALUMNI</li></a>
       <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
       <a href="#"><li style="position: relative; left: 290px;">ABOUT US</li></a>
       <a href="../index.html"><li style="position: relative; left: 300px;">LOGOUT</li></a>
@@ -33,37 +34,29 @@
     
     <div class="basic_frame">
         <div class="left_bar">
-            <label style="text-align: center;">Conversation List</label>
+            <label style="text-align: center; font-weight: 600; font-size: 18px; padding: 10px 0; color: #2d3748;">Conversation List</label>
             <div class="search-box">
-                <input type="text" placeholder="Search..." class="search-bar">
+                <input type="text" placeholder="Search contacts..." class="search-bar">
             </div>
-            <div class="conversation-list">
-                <label>Sujan</label>
-            </div>
-            <div class="conversation-list">
-                <label>Arish Muthaiah</label>
-            </div>
-            <div class="conversation-list">
-                <label>Balaji</label>
-            </div>
-            <div class="conversation-list">
-                <label>Pothiraju</label>
-            </div>
+            <!-- Contacts will be loaded dynamically here -->
         </div>
         <div class="right_bar">
             <div id="profile">
                 <img src="../images/profile.png" alt="Profile Picture" class="profile-img">
-                <label class="profile-name">Sujan</label>
-                <label class="status">Active</label>
+                <label class="profile-name">Select a contact</label>
+                <label class="status">Offline</label>
             </div>
             <div class="chat-container">
+                <!-- Messages will be loaded dynamically here -->
             </div>
             <div class="chat-box">
-                <button class="attributes">➕</button>
+                <button class="attributes" title="Attach file (Coming soon)">➕</button>
                 <input type="text" class="text-bar" placeholder="Type a message...">
                 <button class="send-button">Send</button>
             </div>
         </div>
     </div>
+    <script src="../dark-mode.js"></script>
+    <script src="chat_ui.js"></script>
 </body>
 </html>

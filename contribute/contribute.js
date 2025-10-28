@@ -1,5 +1,5 @@
 // contribute.js (dual origin: Live Server 5501, API 5000)
-const API_BASE = 'http://localhost:5000';
+const API_BASE = window.API_BASE_URL || 'http://localhost:5000';
 
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(location.search);
