@@ -1,4 +1,5 @@
 // Global Variables
+const API_BASE_URL = window.API_BASE_URL || 'http://localhost:5000';
 let currentUser = null;
 let allAlumni = [];
 let currentFilters = { name: '', batch: '', department: '' };
@@ -76,7 +77,7 @@ async function loadCurrentUser() {
     }
 
     try {
-        const response = await fetch(`http://localhost:5000/profile/${userid}`);
+        const response = await fetch(`${API_BASE_URL}/profile/${userid}`);
         const data = await response.json();
         
         console.log('Profile data:', data);
@@ -108,7 +109,7 @@ async function loadFriends() {
     if (!currentUser) return;
 
     try {
-        const response = await fetch(`http://localhost:5000/api/friends/${currentUser.id}`);
+        const response = await fetch(`${API_BASE_URL}/api/friends/${currentUser.id}`);
         const data = await response.json();
         
         if (data.success) {
@@ -153,7 +154,7 @@ async function loadInvitations() {
     if (!currentUser) return;
 
     try {
-        const response = await fetch(`http://localhost:5000/api/friends/invitations/${currentUser.id}`);
+        const response = await fetch(`${API_BASE_URL}/api/friends/invitations/${currentUser.id}`);
         const data = await response.json();
         
         if (data.success) {
@@ -220,7 +221,7 @@ function showInvitationsView() {
 // Load all alumni for adding friends
 async function loadAllAlumni() {
     try {
-        const response = await fetch('http://localhost:5000/students');
+        const response = await fetch('${API_BASE_URL}/students');
         const data = await response.json();
         
         console.log('Alumni data received:', data);
@@ -360,7 +361,7 @@ async function sendInvitation(receiverId, receiverName) {
     if (!currentUser) return;
 
     try {
-        const response = await fetch('http://localhost:5000/api/friends/invite', {
+        const response = await fetch('${API_BASE_URL}/api/friends/invite', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -425,7 +426,7 @@ function displayInvitations() {
 // Accept invitation
 async function acceptInvitation(invitationId) {
     try {
-        const response = await fetch(`http://localhost:5000/api/friends/accept/${invitationId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/friends/accept/${invitationId}`, {
             method: 'POST'
         });
 
@@ -450,7 +451,7 @@ async function rejectInvitation(invitationId) {
     if (!confirm('Are you sure you want to reject this invitation?')) return;
 
     try {
-        const response = await fetch(`http://localhost:5000/api/friends/reject/${invitationId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/friends/reject/${invitationId}`, {
             method: 'POST'
         });
 
@@ -493,7 +494,7 @@ async function loadMessages() {
     if (!currentFriendshipId) return;
 
     try {
-        const response = await fetch(`http://localhost:5000/api/friends/messages/${currentFriendshipId}`);
+        const response = await fetch(`${API_BASE_URL}/api/friends/messages/${currentFriendshipId}`);
         const data = await response.json();
         
         if (data.success) {
@@ -542,7 +543,7 @@ async function sendMessage() {
     if (!message || !currentFriendshipId) return;
 
     try {
-        const response = await fetch('http://localhost:5000/api/friends/messages', {
+        const response = await fetch('${API_BASE_URL}/api/friends/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

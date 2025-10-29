@@ -1,9 +1,12 @@
 
+// Auto-detect API URL
+const API_BASE_URL = window.API_BASE_URL || 'http://localhost:5000';
+
 function login() {
     var identifier = document.getElementById("username").value;
     var password = document.getElementById("password").value;
 
-    fetch("http://localhost:5000/login", {
+    fetch(`${API_BASE_URL}/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -35,7 +38,7 @@ function login() {
 function addAlumniUser() {
     var userid = prompt("Enter new alumni userid:");
     if (!userid) return alert("Userid required");
-    fetch("http://localhost:5000/add-user", {
+    fetch(`${API_BASE_URL}/add-user`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

@@ -50,10 +50,11 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ============= LOAD PROFILE DATA =============
+const API_BASE_URL = window.API_BASE_URL || 'http://localhost:5000';
 const loggedInUser = sessionStorage.getItem('loggedInUser');
 console.log("Fetching profile for:", loggedInUser);
 
-fetch(`http://localhost:5000/profile/${loggedInUser}`)
+fetch(`${API_BASE_URL}/profile/${loggedInUser}`)
   .then(response => {
     console.log("Profile response status:", response.status);
     return response.json();

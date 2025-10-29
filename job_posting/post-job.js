@@ -46,7 +46,8 @@ document.getElementById('postJobForm').addEventListener('submit', async function
   msg.textContent = "Posting...";
   msg.style.color = "#444";
   try {
-  const res = await fetch('http://localhost:5000/api/jobs', {
+  const API_BASE_URL = window.API_BASE_URL || 'http://localhost:5000';
+  const res = await fetch(`${API_BASE_URL}/api/jobs`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

@@ -1,6 +1,7 @@
 // Enhanced jobs-display.js with internship support
 // Dynamic filters and view switching between jobs and internships
 
+const API_BASE_URL = window.API_BASE_URL || 'http://localhost:5000';
 let currentView = 'jobs'; // Track current view
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -119,8 +120,8 @@ function cssEscapeAttr(val) {
 // Initialize filter lists based on current view
 async function initCompanies() {
   const endpoint = currentView === 'internships'
-    ? 'http://localhost:5000/api/internships/companies'
-    : 'http://localhost:5000/api/companies';
+    ? `${API_BASE_URL}/api/internships/companies`
+    : `${API_BASE_URL}/api/companies`;
   await buildFilterList({
     endpoint: endpoint,
     containerId: 'companiesList',
@@ -131,8 +132,8 @@ async function initCompanies() {
 
 async function initJobAreas() {
   const endpoint = currentView === 'internships'
-    ? 'http://localhost:5000/api/internships/job-areas'
-    : 'http://localhost:5000/api/job-areas';
+    ? `${API_BASE_URL}/api/internships/job-areas`
+    : `${API_BASE_URL}/api/job-areas`;
   await buildFilterList({
     endpoint: endpoint,
     containerId: 'jobAreasList',
@@ -143,8 +144,8 @@ async function initJobAreas() {
 
 async function initSkills() {
   const endpoint = currentView === 'internships'
-    ? 'http://localhost:5000/api/internships/skills'
-    : 'http://localhost:5000/api/skills';
+    ? `${API_BASE_URL}/api/internships/skills`
+    : `${API_BASE_URL}/api/skills`;
   await buildFilterList({
     endpoint: endpoint,
     containerId: 'skillsList',
@@ -155,8 +156,8 @@ async function initSkills() {
 
 async function initLocations() {
   const endpoint = currentView === 'internships'
-    ? 'http://localhost:5000/api/internships/locations'
-    : 'http://localhost:5000/api/locations';
+    ? `${API_BASE_URL}/api/internships/locations`
+    : `${API_BASE_URL}/api/locations`;
   await buildFilterList({
     endpoint: endpoint,
     containerId: 'locationsList',
@@ -226,7 +227,7 @@ async function loadJobs(filters) {
   panel.innerHTML = 'Loading jobs...';
 
   try {
-  const url = new URL('http://localhost:5000/api/jobs');
+  const url = new URL(`${API_BASE_URL}/api/jobs`);
     if (filters.company) url.searchParams.set('company', filters.company);
     if (filters.jobArea) url.searchParams.set('jobArea', filters.jobArea);
     if (filters.skill) url.searchParams.set('skill', filters.skill);
@@ -254,7 +255,7 @@ async function loadInternships(filters) {
   panel.innerHTML = 'Loading internships...';
 
   try {
-    const url = new URL('http://localhost:5000/api/internships');
+    const url = new URL(`${API_BASE_URL}/api/internships`);
     if (filters.company) url.searchParams.set('company', filters.company);
     if (filters.jobArea) url.searchParams.set('jobArea', filters.jobArea);
     if (filters.skill) url.searchParams.set('skill', filters.skill);
