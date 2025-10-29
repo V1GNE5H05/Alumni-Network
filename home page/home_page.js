@@ -22,7 +22,7 @@ fetch(`${API_URL}/posts`)
 			postsHtml += `<div class="post" data-idx="${idx}" style="margin-bottom:20px;padding:10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);background:#fff;cursor:pointer;">
 				<label style="font-weight:bold;">${post.author || 'Unknown'}</label><br><br>
 				<label style="color:gray;">${post.time || ''}</label><br>
-				${post.imageUrl ? `<img src="${API_URL}${post.imageUrl}" alt="user post" style="width: 500px; height: 400px; position:relative; left:150px; margin:25px;">` : `<img src="images/alternate.png" alt="alternate" style="width: 400px; height: 300px;">`}
+				${post.imageUrl ? `<img src="${post.imageUrl.startsWith('http') ? post.imageUrl : API_URL + post.imageUrl}" alt="user post" style="width: 100%; max-width: 600px; height: auto; margin: 15px auto; display: block; border-radius: 8px;">` : `<img src="images/alternate.png" alt="alternate" style="width: 100%; max-width: 500px; height: auto; display: block; margin: 15px auto;">`}
 				<p>${post.content || ''}</p>
 			</div>`;
 		});

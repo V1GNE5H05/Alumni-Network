@@ -247,7 +247,7 @@ span {
 .main-section {
   flex: 1;
   margin: 10px;
-  max-width: calc(100% - 340px);
+  max-width: calc(100% - 640px);
   overflow-x: hidden;
 }
 
@@ -260,15 +260,16 @@ span {
 .inner-post {
   width: 100%;
   max-width: 100%;
-}.main-section {
-  width: max-content;
+}
+
+.post-container {
+  width: 100%;
+  max-width: 700px;
   min-height: 120px;
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-  position: relative;
-  left: 100px;
-  margin: 10px;
+  margin: 10px auto;
   padding: 18px 24px;
 }
 
