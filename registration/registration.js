@@ -106,11 +106,12 @@ const steps = [
     }
 ];
 
-// Generate batch options (last 10 years)
+// Generate batch options (2 years ahead to 10 years back)
 function generateBatchOptions() {
     const currentYear = new Date().getFullYear();
     const options = [];
-    for (let i = 0; i < 10; i++) {
+    // Include 2 years ahead (for current students)
+    for (let i = -2; i < 10; i++) {
         const endYear = currentYear - i;
         const startYear = endYear - 4;
         options.push(`${startYear}-${endYear}`);
