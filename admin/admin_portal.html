@@ -24,6 +24,7 @@
             <div class="menu-items active" id="dashboardMenu"><label>📊 Dashboard</label></div>
             <div class="menu-items" id="postMenu"><label>📝 Posts</label></div>
             <div class="menu-items" id="alumniMenu"><label>👥 Alumni</label></div>
+            <div class="menu-items" id="studentsMenu"><label>👨‍🎓 Students</label></div>
             <div class="menu-items" id="fundmenu"><label>💰 Fundraising</label></div>
             <div class="menu-items" id="eventMenu"><label>🎉 Events</label></div>
             <div class="menu-items menu-with-submenu" id="moreMenu">
@@ -48,7 +49,8 @@
         <!-- HEADER -->
         <div class="main-header">
             <input type="search" placeholder="🔍 Search... (Ctrl+K)" class="search-bar" id="globalSearch">
-            <button class="add_std_btn" onclick="openStudentModal()">➕ Add Student</button>
+            <button class="" onclick="openStudentModal()">➕ Add Student</button>
+             <button class="add_student_list" onclick="openStudentslist()">➕ Add Studentslist</button>
             <button class="export-btn" onclick="exportStudents()">📊 Export Data</button>
             <div class="notification">Notification 🔔</div>
         </div>
@@ -112,6 +114,59 @@
                 <tr><td colspan="8" style="text-align:center;padding:20px;">Loading students...</td></tr>
             </tbody>
         </table>
+
+        <!-- STUDENTS SECTION (from student database) -->
+        <div id="studentsDbSection" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <h2>👨‍🎓 Students Database</h2>
+                <div style="display:flex;gap:10px;">
+                    <button onclick="openAddSingleStudentModal()" class="add_std_btn" style="background:#10b981;">➕ Add Student</button>
+                    <button onclick="openBulkStudentUploadModal()" class="add_std_btn" style="background:#3b82f6;">📂 Bulk Upload</button>
+                    <button onclick="loadStudentsFromDb()" class="add_std_btn">🔄 Refresh</button>
+                </div>
+            </div>
+            
+            <!-- Filter Section for Students DB -->
+            <div class="filter-section" style="display:flex;gap:15px;align-items:center;margin:20px 0;padding:15px;background:var(--bg-secondary);border-radius:10px;box-shadow:var(--shadow-md);border:1px solid var(--border-color);">
+                <label style="font-weight:600;color:var(--text-primary);font-size:16px;">🔍 Filter Students:</label>
+                
+                <select id="filterStudentDepartment" onchange="filterStudentsDb()" style="padding:8px 12px;border:2px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);font-size:14px;cursor:pointer;transition:all 0.3s;">
+                    <option value="">All Departments</option>
+                    <option value="Computer Science and Engineering">Computer Science</option>
+                    <option value="Electronics and Communication Engineering">ECE</option>
+                    <option value="Electrical and Electronics Engineering">EEE</option>
+                    <option value="Mechanical Engineering">Mechanical</option>
+                    <option value="Civil Engineering">Civil</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Automobile Engineering">Automobile</option>
+                    <option value="Biomedical Engineering">Biomedical</option>
+                </select>
+
+                <select id="filterStudentBatch" onchange="filterStudentsDb()" style="padding:8px 12px;border:2px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);font-size:14px;cursor:pointer;transition:all 0.3s;">
+                    <option value="">All Batches</option>
+                </select>
+
+                <button onclick="clearStudentFilters()" style="padding:8px 16px;background:var(--danger-color);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all 0.3s;">
+                    ✖ Clear Filters
+                </button>
+            </div>
+
+            <table class="alumni-data-box">
+                <thead>
+                <tr>
+                    <th>Admission Number</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Batch</th>
+                    <th>Status</th>
+                    <th>Uploaded Date</th>
+                </tr>
+                </thead>
+                <tbody id="studentsDbTable">
+                    <tr><td colspan="6" style="text-align:center;padding:20px;">Loading students from database...</td></tr>
+                </tbody>
+            </table>
+        </div>
 
         <!-- POSTS SECTION -->
         <div id="postsSection" style="display:none;">
@@ -334,6 +389,107 @@
             </div>
             <div id="eventResult" style="margin-top:12px;font-size:14px;"></div>
         </form>
+    </div>
+</div>
+
+<!-- ADD SINGLE STUDENT TO STUDENT DATABASE MODAL -->
+<div id="addSingleStudentModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:500px;">
+        <span class="close-btn" onclick="closeAddSingleStudentModal()">&times;</span>
+        <h2 style="color:#10b981;margin-bottom:20px;">➕ Add Student to Database</h2>
+        <form id="addSingleStudentForm" style="display:flex;flex-direction:column;gap:15px;">
+            <div>
+                <label style="font-weight:600;color:#333;margin-bottom:5px;display:block;">Admission Number *</label>
+                <input type="text" id="singleAdmissionNumber" placeholder="e.g., ALU2021CSE001" required 
+                    style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:14px;">
+            </div>
+            <div>
+                <label style="font-weight:600;color:#333;margin-bottom:5px;display:block;">Name *</label>
+                <input type="text" id="singleName" placeholder="e.g., Vigneshwaran K" required 
+                    style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:14px;">
+            </div>
+            <div>
+                <label style="font-weight:600;color:#333;margin-bottom:5px;display:block;">Department *</label>
+                <select id="singleDepartment" required 
+                    style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:14px;">
+                    <option value="">Select Department</option>
+                    <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+                    <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+                    <option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    <option value="Civil Engineering">Civil Engineering</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Automobile Engineering">Automobile Engineering</option>
+                    <option value="Biomedical Engineering">Biomedical Engineering</option>
+                </select>
+            </div>
+            <div>
+                <label style="font-weight:600;color:#333;margin-bottom:5px;display:block;">Batch *</label>
+                <select id="singleBatch" required 
+                    style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:14px;">
+                    <option value="">Select Batch</option>
+                    <option value="2019-2023">2019-2023</option>
+                    <option value="2020-2024">2020-2024</option>
+                    <option value="2021-2025">2021-2025</option>
+                    <option value="2022-2026">2022-2026</option>
+                    <option value="2023-2027">2023-2027</option>
+                    <option value="2024-2028">2024-2028</option>
+                </select>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:10px;">
+                <button type="button" onclick="closeAddSingleStudentModal()" 
+                    style="padding:10px 20px;background:#eee;border:1px solid #ccc;border-radius:8px;cursor:pointer;font-weight:600;">
+                    Cancel
+                </button>
+                <button type="submit" 
+                    style="padding:10px 20px;background:#10b981;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
+                    ➕ Add Student
+                </button>
+            </div>
+        </form>
+        <div id="singleStudentResult" style="margin-top:15px;padding:10px;border-radius:8px;display:none;"></div>
+    </div>
+</div>
+
+<!-- BULK STUDENT UPLOAD TO STUDENT DATABASE MODAL -->
+<div id="bulkStudentUploadModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:700px;">
+        <span class="close-btn" onclick="closeBulkStudentUploadModal()">&times;</span>
+        <h2 style="color:#3b82f6;margin-bottom:20px;">📂 Bulk Upload Students to Database</h2>
+        
+        <div style="background:#f0f9ff;padding:15px;border-radius:8px;margin-bottom:20px;border-left:4px solid #3b82f6;">
+            <h3 style="margin:0 0 10px 0;color:#1e40af;">📋 CSV Format Required:</h3>
+            <p style="margin:5px 0;font-family:monospace;background:white;padding:8px;border-radius:4px;font-size:13px;">
+                <strong>Admission Number, Name, Department, Batch</strong>
+            </p>
+            <p style="margin:10px 0 5px 0;color:#666;font-size:14px;">Example:</p>
+            <pre style="background:white;padding:10px;border-radius:4px;font-size:12px;overflow-x:auto;">ALU2021CSE001,Vigneshwaran K,Computer Science and Engineering,2021-2025
+ALU2021ECE002,John Doe,Electronics and Communication Engineering,2021-2025
+ALU2022CSE010,Jane Smith,Computer Science and Engineering,2022-2026</pre>
+        </div>
+
+        <form id="bulkStudentUploadForm" style="display:flex;flex-direction:column;gap:15px;">
+            <div>
+                <label style="font-weight:600;color:#333;margin-bottom:10px;display:block;">Upload CSV File *</label>
+                <input type="file" id="bulkStudentCsvFile" accept=".csv" required
+                    style="width:100%;padding:10px;border:2px dashed #3b82f6;border-radius:8px;font-size:14px;background:#f0f9ff;">
+            </div>
+            <div id="bulkStudentPreview" style="display:none;margin-top:10px;">
+                <h4 style="color:#333;margin-bottom:10px;">Preview (First 5 students):</h4>
+                <div id="bulkStudentPreviewTable" style="max-height:200px;overflow-y:auto;border:1px solid #ddd;border-radius:8px;"></div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:10px;">
+                <button type="button" onclick="closeBulkStudentUploadModal()" 
+                    style="padding:10px 20px;background:#eee;border:1px solid #ccc;border-radius:8px;cursor:pointer;font-weight:600;">
+                    Cancel
+                </button>
+                <button type="submit" id="bulkStudentUploadBtn"
+                    style="padding:10px 20px;background:#3b82f6;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
+                    📤 Upload Students
+                </button>
+            </div>
+        </form>
+        <div id="bulkStudentResult" style="margin-top:15px;padding:10px;border-radius:8px;display:none;"></div>
     </div>
 </div>
 

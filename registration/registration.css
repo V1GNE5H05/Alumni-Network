@@ -1,0 +1,264 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.registration-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    background: white;
+    padding: 20px 30px;
+    border-bottom: 2px solid #e0e0e0;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.header .subtitle {
+    color: #999;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.refresh-btn {
+    background: #1976d2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.refresh-btn:hover {
+    background: #1565c0;
+}
+
+/* Chat Container */
+.chat-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+    background: #f5f5f5;
+}
+
+.message {
+    display: flex;
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message.bot {
+    justify-content: flex-start;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.avatar.bot {
+    background: #1976d2;
+    color: white;
+}
+
+.avatar.user {
+    background: #667eea;
+    color: white;
+}
+
+.message-content {
+    max-width: 70%;
+    padding: 15px 20px;
+    border-radius: 18px;
+    margin: 0 10px;
+}
+
+.message.bot .message-content {
+    background: #e3f2fd;
+    color: #333;
+}
+
+.message.user .message-content {
+    background: #1976d2;
+    color: white;
+}
+
+/* Input Container */
+.input-container {
+    padding: 20px 30px;
+    background: white;
+    border-top: 2px solid #e0e0e0;
+    border-radius: 0 0 20px 20px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.input-container select,
+.input-container input {
+    flex: 1;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-container select:focus,
+.input-container input:focus {
+    border-color: #1976d2;
+}
+
+.send-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #1976d2;
+    color: white;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.send-btn:hover {
+    background: #1565c0;
+    transform: scale(1.1);
+}
+
+.send-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: scale(1);
+}
+
+/* Options */
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.option-btn {
+    padding: 12px 20px;
+    background: white;
+    border: 2px solid #1976d2;
+    border-radius: 10px;
+    color: #1976d2;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.option-btn:hover {
+    background: #1976d2;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+/* Loading */
+.loading {
+    display: inline-block;
+}
+
+.loading::after {
+    content: '...';
+    animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+}
+
+/* Success Message */
+.success-message {
+    background: #4CAF50;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.error-message {
+    background: #f44336;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 18px;
+    }
+    
+    .message-content {
+        max-width: 85%;
+    }
+    
+    .options-grid {
+        grid-template-columns: 1fr;
+    }
+}

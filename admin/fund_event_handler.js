@@ -642,7 +642,8 @@ function initMenuNavigation() {
       eventsSection: document.getElementById('eventsSection'),
       statisticsSection: document.getElementById('statisticsSection'),
       membersSection: document.getElementById('membersSection'),
-      proudAlumniSection: document.getElementById('proudAlumniSection')
+      proudAlumniSection: document.getElementById('proudAlumniSection'),
+      studentsDbSection: document.getElementById('studentsDbSection')
     };
     
     Object.values(sections).forEach(section => {

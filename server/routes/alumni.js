@@ -136,13 +136,51 @@ router.put('/profile/:username', asyncHandler(async (req, res) => {
 
 // Change password
 router.put('/profile/:username/password', asyncHandler(async (req, res) => {
+  const bcrypt = require('bcrypt');
   const usersCollection = getCollection('users');
   const { oldPassword, newPassword } = req.body;
   
-  if (!oldPassword || !newPassword || newPassword.length < 5) {
+  // Enhanced password validation
+  if (!oldPassword || !newPassword) {
     return res.status(400).json({ 
       success: false,
-      message: "Invalid password data" 
+      message: "❌ Old password and new password are required" 
+    });
+  }
+  
+  // Validate new password strength
+  if (newPassword.length < 8) {
+    return res.status(400).json({ 
+      success: false,
+      message: "❌ New password must be at least 8 characters long" 
+    });
+  }
+  
+  if (!/[A-Z]/.test(newPassword)) {
+    return res.status(400).json({ 
+      success: false,
+      message: "❌ New password must contain at least one uppercase letter" 
+    });
+  }
+  
+  if (!/[a-z]/.test(newPassword)) {
+    return res.status(400).json({ 
+      success: false,
+      message: "❌ New password must contain at least one lowercase letter" 
+    });
+  }
+  
+  if (!/[0-9]/.test(newPassword)) {
+    return res.status(400).json({ 
+      success: false,
+      message: "❌ New password must contain at least one number" 
+    });
+  }
+  
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPassword)) {
+    return res.status(400).json({ 
+      success: false,
+      message: "❌ New password must contain at least one special character" 
     });
   }
   
@@ -157,25 +195,41 @@ router.put('/profile/:username/password', asyncHandler(async (req, res) => {
   if (!user) {
     return res.status(404).json({ 
       success: false,
-      message: "User not found" 
+      message: "❌ User not found" 
     });
   }
   
-  if (user.password !== oldPassword) {
+  // Check old password (support both hashed and plain text)
+  let oldPasswordMatch = false;
+  if (user.password.startsWith('$2b$') || user.password.startsWith('$2a$')) {
+    // Password is hashed - use bcrypt
+    oldPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+  } else {
+    // Legacy plain text password
+    oldPasswordMatch = (user.password === oldPassword);
+  }
+  
+  if (!oldPasswordMatch) {
     return res.status(400).json({ 
       success: false,
-      message: "Old password is incorrect" 
+      message: "❌ Old password is incorrect" 
     });
   }
+  
+  // Hash the new password
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
   
   await usersCollection.updateOne(
     { _id: user._id },
-    { $set: { password: newPassword } }
+    { $set: { 
+      password: hashedPassword,
+      passwordUpdatedAt: new Date()
+    } }
   );
   
   res.json({ 
     success: true,
-    message: "Password updated" 
+    message: "✅ Password updated successfully" 
   });
 }));
 
@@ -296,6 +350,179 @@ router.post('/students/bulk-delete', asyncHandler(async (req, res) => {
     message: `${result.deletedCount} student(s) deleted successfully`,
     deletedCount: result.deletedCount
   });
+}));
+
+// Add single student to student database
+router.post('/api/add-student-to-database', asyncHandler(async (req, res) => {
+  const { admissionNumber, name, department, batch, degree } = req.body;
+  
+  // Validation
+  if (!admissionNumber || !name || !department || !batch) {
+    return res.status(400).json({
+      success: false,
+      message: 'Admission number, name, department, and batch are required'
+    });
+  }
+  
+  try {
+    const { MongoClient } = require('mongodb');
+    const studentDbUri = process.env.STUDENT_DB_URI || process.env.MONGODB_URI;
+    const client = new MongoClient(studentDbUri);
+    await client.connect();
+    
+    const studentDb = client.db('alumni_network');
+    
+    // Use preregistered_students collection instead of department-specific collections
+    const collection = studentDb.collection('preregistered_students');
+    
+    // Check if student already exists
+    const existingStudent = await collection.findOne({ admissionNumber });
+    if (existingStudent) {
+      await client.close();
+      return res.status(400).json({
+        success: false,
+        message: 'Student with this admission number already exists'
+      });
+    }
+    
+    // Insert student
+    const studentData = {
+      admissionNumber,
+      name,
+      department,
+      batch,
+      degree: degree || 'B.E',
+      status: 'Pending Registration',
+      uploadedAt: new Date()
+    };
+    
+    await collection.insertOne(studentData);
+    await client.close();
+    
+    res.json({
+      success: true,
+      message: `Student ${name} added successfully to ${department}`,
+      student: studentData
+    });
+    
+  } catch (error) {
+    console.error('Error adding student:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error adding student: ' + error.message
+    });
+  }
+}));
+
+// Bulk upload students to student database
+router.post('/api/upload-students-bulk', asyncHandler(async (req, res) => {
+  const { students } = req.body;
+  
+  if (!students || !Array.isArray(students) || students.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Students array is required'
+    });
+  }
+  
+  try {
+    // Connect to alumni_network database
+    const { MongoClient } = require('mongodb');
+    const studentDbUri = process.env.STUDENT_DB_URI || process.env.MONGODB_URI;
+    const client = new MongoClient(studentDbUri);
+    await client.connect();
+    
+    const studentDb = client.db('alumni_network');
+    const collection = studentDb.collection('preregistered_students');
+    
+    // Prepare student data
+    const studentData = students.map(student => ({
+      admissionNumber: student.alumni_id || student.admissionNumber,
+      name: student.name,
+      department: student.department,
+      batch: student.batch,
+      degree: student.degree || 'B.E',
+      status: 'Pending Registration',
+      uploadedAt: new Date()
+    }));
+    
+    // Insert all students into single collection
+    let totalInserted = 0;
+    let duplicates = 0;
+    
+    try {
+      const result = await collection.insertMany(studentData, { ordered: false });
+      totalInserted = result.insertedCount;
+    } catch (error) {
+      // Handle duplicate key errors
+      if (error.code === 11000) {
+        totalInserted = error.result?.nInserted || 0;
+        duplicates = studentData.length - totalInserted;
+      } else {
+        throw error;
+      }
+    }
+    
+    await client.close();
+    
+    res.json({
+      success: true,
+      message: `Successfully uploaded ${totalInserted} students (${duplicates} duplicates skipped)`,
+      totalInserted,
+      duplicates,
+      total: studentData.length
+    });
+    
+  } catch (error) {
+    console.error('Bulk upload error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error uploading students: ' + error.message
+    });
+  }
+}));
+
+// Get all students from preregistered_students collection
+router.get('/api/students-database', asyncHandler(async (req, res) => {
+  try {
+    const { MongoClient } = require('mongodb');
+    const studentDbUri = process.env.STUDENT_DB_URI || process.env.MONGODB_URI;
+    const client = new MongoClient(studentDbUri);
+    await client.connect();
+    
+    const studentDb = client.db('alumni_network');
+    const collection = studentDb.collection('preregistered_students');
+    
+    // Fetch all preregistered students
+    const allStudents = await collection.find({}).toArray();
+    
+    // Format the response
+    const formattedStudents = allStudents.map(student => ({
+      _id: student._id,
+      admissionNumber: student.admissionNumber,
+      name: student.name,
+      department: student.department,
+      batch: student.batch,
+      degree: student.degree || 'B.E',
+      status: student.status || 'Pending Registration',
+      uploadedAt: student.uploadedAt || student.createdAt || null
+    }));
+    
+    await client.close();
+    
+    res.json({
+      success: true,
+      students: formattedStudents,
+      count: formattedStudents.length
+    });
+    
+  } catch (error) {
+    console.error('Error fetching students from database:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching students: ' + error.message
+    });
+  }
 }));
 
 module.exports = router;

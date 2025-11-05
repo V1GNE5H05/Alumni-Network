@@ -12,11 +12,20 @@
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     API_BASE_URL = 'http://localhost:5000';
   } 
-  // For Render or other production deployments - use same protocol, no port
-  else if (hostname.includes('onrender.com') || hostname.includes('herokuapp.com')) {
+  // For production deployments (Render, Heroku, Vercel, Netlify, Railway, etc.)
+  else if (
+    hostname.includes('onrender.com') || 
+    hostname.includes('herokuapp.com') || 
+    hostname.includes('vercel.app') ||
+    hostname.includes('netlify.app') ||
+    hostname.includes('railway.app') ||
+    hostname.includes('fly.dev') ||
+    hostname.includes('azurewebsites.net')
+  ) {
+    // Use same protocol and hostname (https in production)
     API_BASE_URL = `${protocol}//${hostname}`;
   }
-  // For local network IP (e.g., 192.168.x.x)
+  // For local network IP (e.g., 192.168.x.x) - development on LAN
   else {
     API_BASE_URL = `http://${hostname}:5000`;
   }

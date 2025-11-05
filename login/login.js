@@ -3,8 +3,14 @@
 const API_BASE_URL = window.API_BASE_URL || 'http://localhost:5000';
 
 function login() {
-    var identifier = document.getElementById("username").value;
+    var identifier = document.getElementById("username").value.trim();
     var password = document.getElementById("password").value;
+
+    // Client-side validation
+    if (!identifier || !password) {
+        alert("❌ Please enter both username and password!");
+        return;
+    }
 
     fetch(`${API_BASE_URL}/login`, {
         method: "POST",
@@ -25,12 +31,14 @@ function login() {
                 window.location.href = "../home page/home_page.html";
             }
         } else {
-            alert("Invalid credentials");
+            // Show user-friendly error messages
+            const errorMessage = data.message || "Invalid credentials. Please check your username and password.";
+            alert("❌ " + errorMessage);
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        alert("An error occurred. Please try again.");
+        alert("❌ An error occurred. Please check your internet connection and try again.");
     });
 }
 
