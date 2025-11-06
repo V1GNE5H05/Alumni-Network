@@ -19,6 +19,7 @@ const chatRoutes = require('./routes/chat');
 const membersRoutes = require('./routes/members');
 const proudableAlumniRoutes = require('./routes/proudable_alumni');
 const friendsRoutes = require('./routes/friends');
+const statisticsRoutes = require('./routes/statistics');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -73,6 +74,7 @@ app.use('/api/chat', chatRoutes);            // /api/chat/*
 app.use('/api/members', membersRoutes);      // /api/members
 app.use('/api/proudable-alumni', proudableAlumniRoutes); // /api/proudable-alumni
 app.use('/api/friends', friendsRoutes);      // /api/friends
+app.use('/api/statistics', statisticsRoutes); // /api/statistics/*
 
 // ========== BULK IMPORT STUDENTS ENDPOINT (NEW) ==========
 app.post('/students/bulk-import', async (req, res) => {

@@ -22,6 +22,7 @@
 
         <div class="menu">
             <div class="menu-items active" id="dashboardMenu"><label>📊 Dashboard</label></div>
+            <div class="menu-items" id="statisticsMenu"><label>📈 Statistics</label></div>
             <div class="menu-items" id="postMenu"><label>📝 Posts</label></div>
             <div class="menu-items" id="alumniMenu"><label>👥 Alumni</label></div>
             <div class="menu-items" id="studentsMenu"><label>👨‍🎓 Students</label></div>
@@ -112,6 +113,100 @@
                 <tr><td colspan="8" style="text-align:center;padding:20px;">Loading students...</td></tr>
             </tbody>
         </table>
+
+        <!-- REGISTRATION STATISTICS SECTION -->
+        <div id="registrationStatsSection" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <h2>📈 Department-wise Registration Statistics</h2>
+                <button onclick="refreshStatistics()" class="add_std_btn">🔄 Refresh</button>
+            </div>
+
+            <!-- Summary Statistics Cards -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:30px;">
+                <div class="stat-card">
+                    <div class="stat-label">Total Students</div>
+                    <div class="stat-value" id="totalStudentsCount">0</div>
+                </div>
+                <div class="stat-card stat-success">
+                    <div class="stat-label">Registered</div>
+                    <div class="stat-value" id="totalRegisteredCount">0</div>
+                </div>
+                <div class="stat-card stat-danger">
+                    <div class="stat-label">Not Registered</div>
+                    <div class="stat-value" id="totalNotRegisteredCount">0</div>
+                </div>
+                <div class="stat-card stat-info">
+                    <div class="stat-label">Registration Rate</div>
+                    <div class="stat-value" id="totalRegistrationRate">0%</div>
+                </div>
+            </div>
+
+            <!-- Department-wise Statistics Table -->
+            <div style="background:var(--bg-secondary);border-radius:10px;padding:20px;box-shadow:var(--shadow-md);margin-bottom:30px;">
+                <h3 style="margin-bottom:20px;color:var(--text-primary);">📊 Department-wise Breakdown</h3>
+                <table class="alumni-data-box" style="margin:0;">
+                    <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Total</th>
+                        <th style="color:#10b981;">✅ Registered</th>
+                        <th style="color:#ef4444;">❌ Not Registered</th>
+                        <th>Progress</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="deptStatsTable">
+                        <tr><td colspan="6" style="text-align:center;padding:20px;">Loading statistics...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Details Section (Students Lists) -->
+            <div id="statsDetailsSection" style="display:none;background:var(--bg-secondary);border-radius:10px;padding:20px;box-shadow:var(--shadow-md);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                    <h3 id="detailsTitle" style="color:var(--text-primary);">Student Details</h3>
+                    <button onclick="closeDetailsSection()" style="background:var(--danger-color);color:white;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;">✖ Close</button>
+                </div>
+
+                <!-- Registered Students List -->
+                <div id="registeredStudentsList" style="margin-bottom:30px;">
+                    <h4 style="color:#10b981;margin-bottom:15px;">✅ Registered Students</h4>
+                    <table class="alumni-data-box" style="margin:0;">
+                        <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                            <th>Alumni ID</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                            <th>Batch</th>
+                        </tr>
+                        </thead>
+                        <tbody id="registeredStudentsTable">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Not Registered Students List -->
+                <div id="notRegisteredStudentsList">
+                    <h4 style="color:#ef4444;margin-bottom:15px;">❌ Not Registered Students</h4>
+                    <table class="alumni-data-box" style="margin:0;">
+                        <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                            <th>Admission Number</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                            <th>Batch</th>
+                        </tr>
+                        </thead>
+                        <tbody id="notRegisteredStudentsTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
         <!-- STUDENTS SECTION (from student database) -->
         <div id="studentsDbSection" style="display:none;">

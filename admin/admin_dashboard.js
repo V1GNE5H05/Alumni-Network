@@ -1669,3 +1669,177 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+// ============= REGISTRATION STATISTICS FEATURE =============
+// Statistics menu handler
+document.addEventListener('DOMContentLoaded', function() {
+  const statisticsMenu = document.getElementById('statisticsMenu');
+  
+  if (statisticsMenu) {
+    statisticsMenu.addEventListener('click', function() {
+      // Hide all sections
+      document.querySelectorAll('#dashboardSection, #alumniTableSection, #postsSection, #eventsSection, #fundsSection, #memberSection, #jobsSection, #studentsDbSection, #registrationStatsSection').forEach(section => {
+        section.style.display = 'none';
+      });
+      
+      // Show statistics section
+      const statsSection = document.getElementById('registrationStatsSection');
+      if (statsSection) {
+        statsSection.style.display = 'block';
+        refreshStatistics();
+      }
+      
+      // Update active menu
+      document.querySelectorAll('.menu-items').forEach(menu => {
+        menu.classList.remove('active');
+      });
+      statisticsMenu.classList.add('active');
+    });
+  }
+});
+
+// Refresh statistics data
+async function refreshStatistics() {
+  LoadingManager.show('Loading statistics...');
+  
+  try {
+    const response = await fetch(`${API_URL}/api/statistics/registration`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch statistics');
+    }
+    
+    const data = await response.json();
+    
+    // Update summary cards
+    document.getElementById('totalStudentsCount').textContent = data.summary.total;
+    document.getElementById('totalRegisteredCount').textContent = data.summary.registered;
+    document.getElementById('totalNotRegisteredCount').textContent = data.summary.notRegistered;
+    
+    const rate = data.summary.total > 0 ? ((data.summary.registered / data.summary.total) * 100).toFixed(1) : 0;
+    document.getElementById('totalRegistrationRate').textContent = `${rate}%`;
+    
+    // Update department breakdown table
+    const tableBody = document.getElementById('deptStatsTable');
+    tableBody.innerHTML = '';
+    
+    data.departments.forEach((dept, index) => {
+      const percentage = dept.total > 0 ? ((dept.registered / dept.total) * 100).toFixed(1) : 0;
+      
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${dept.name}</td>
+        <td>${dept.total}</td>
+        <td style="color:#10b981;font-weight:600;">${dept.registered}</td>
+        <td style="color:#ef4444;font-weight:600;">${dept.notRegistered}</td>
+        <td>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:${percentage}%;">${percentage}%</div>
+          </div>
+        </td>
+        <td>
+          <button class="expand-btn" onclick="showDepartmentDetails('${dept.name}')">
+            View Details
+          </button>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    });
+    
+    LoadingManager.hide();
+  } catch (error) {
+    console.error('Error loading statistics:', error);
+    LoadingManager.hide();
+    alert('Failed to load statistics. Please try again.');
+  }
+}
+
+// Show department details
+async function showDepartmentDetails(department) {
+  LoadingManager.show('Loading department details...');
+  
+  try {
+    const response = await fetch(`${API_URL}/api/statistics/department/${encodeURIComponent(department)}`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch department details');
+    }
+    
+    const data = await response.json();
+    
+    // Populate registered students table
+    const registeredTable = document.getElementById('registeredStudentsTable');
+    registeredTable.innerHTML = '';
+    
+    if (data.registered.length === 0) {
+      registeredTable.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No registered students</td></tr>';
+    } else {
+      data.registered.forEach((student, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${student.name}</td>
+          <td>${student.alumniId || 'N/A'}</td>
+          <td>${student.email || 'N/A'}</td>
+          <td>${student.department}</td>
+          <td>${student.batch}</td>
+        `;
+        registeredTable.appendChild(row);
+      });
+    }
+    
+    // Populate not registered students table
+    const notRegisteredTable = document.getElementById('notRegisteredStudentsTable');
+    notRegisteredTable.innerHTML = '';
+    
+    if (data.notRegistered.length === 0) {
+      notRegisteredTable.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">All students registered!</td></tr>';
+    } else {
+      data.notRegistered.forEach((student, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${student.name}</td>
+          <td>${student.admissionNumber}</td>
+          <td>${student.email || 'N/A'}</td>
+          <td>${student.department}</td>
+          <td>${student.batch}</td>
+        `;
+        notRegisteredTable.appendChild(row);
+      });
+    }
+    
+    // Show details section
+    const detailsSection = document.getElementById('statsDetailsSection');
+    detailsSection.style.display = 'block';
+    
+    // Update department title
+    const title = detailsSection.querySelector('h3');
+    if (title) {
+      title.textContent = `Department Details: ${department}`;
+    }
+    
+    LoadingManager.hide();
+  } catch (error) {
+    console.error('Error loading department details:', error);
+    LoadingManager.hide();
+    alert('Failed to load department details. Please try again.');
+  }
+}
+
+// Close details section
+function closeDetailsSection() {
+  const detailsSection = document.getElementById('statsDetailsSection');
+  if (detailsSection) {
+    detailsSection.style.display = 'none';
+  }
+}
+
+// Make functions globally accessible
+window.refreshStatistics = refreshStatistics;
+window.showDepartmentDetails = showDepartmentDetails;
+window.closeDetailsSection = closeDetailsSection;
