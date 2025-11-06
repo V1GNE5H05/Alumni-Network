@@ -177,7 +177,7 @@ router.post('/bulk-delete', asyncHandler(async (req, res) => {
 router.post('/:id/participate', asyncHandler(async (req, res) => {
   const eventsCollection = getCollection('events');
   const { id } = req.params;
-  const { alumniId, alumniName, alumniEmail } = req.body;
+  const { alumniId } = req.body;
   
   if (!ObjectId.isValid(id)) {
     return res.status(400).json({ 
@@ -186,10 +186,10 @@ router.post('/:id/participate', asyncHandler(async (req, res) => {
     });
   }
 
-  if (!alumniId || !alumniName || !alumniEmail) {
+  if (!alumniId) {
     return res.status(400).json({ 
       success: false,
-      message: 'Alumni ID, name, and email are required' 
+      message: 'Alumni ID is required' 
     });
   }
 
@@ -223,8 +223,6 @@ router.post('/:id/participate', asyncHandler(async (req, res) => {
 
   const participant = {
     alumniId,
-    alumniName,
-    alumniEmail,
     registeredAt: new Date()
   };
 
