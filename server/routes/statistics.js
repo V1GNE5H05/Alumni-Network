@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { verifyToken, isAdmin } = require('../middleware/auth');
+const { getDB } = require('../config/database');
 const { ObjectId } = require('mongodb');
 
 /**
  * GET /api/statistics/registration
  * Get department-wise registration statistics
  */
-router.get('/registration', verifyToken, isAdmin, async (req, res) => {
+router.get('/registration', async (req, res) => {
   try {
-    const db = req.app.locals.db;
+    const db = getDB();
     
     // Get all students from students_database collection
     const allStudents = await db.collection('students_database').find({}).toArray();
@@ -80,9 +80,9 @@ router.get('/registration', verifyToken, isAdmin, async (req, res) => {
  * GET /api/statistics/department/:departmentName
  * Get detailed student list for a specific department
  */
-router.get('/department/:departmentName', verifyToken, isAdmin, async (req, res) => {
+router.get('/department/:departmentName', async (req, res) => {
   try {
-    const db = req.app.locals.db;
+    const db = getDB();
     const departmentName = decodeURIComponent(req.params.departmentName);
     
     // Get all students from this department
