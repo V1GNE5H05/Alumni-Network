@@ -36,7 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let eventsData = [];
-const EVENTS_API_BASE = window.API_BASE_URL ? `${window.API_BASE_URL}/api/events` : 'http://localhost:5000/api/events';
+const API_BASE_URL = window.API_BASE_URL || 'http://localhost:5000';
+const EVENTS_API_BASE = `${API_BASE_URL}/api/events`;
+
+console.log('🌐 Events API Base URL:', EVENTS_API_BASE);
 
 const eventsGrid = document.getElementById('eventsGrid');
 const viewEventModal = document.getElementById('viewEventModal');
@@ -51,8 +54,15 @@ const addEventForm = document.getElementById('addEventForm');
 async function renderEvents() {
     eventsGrid.innerHTML = '<div style="padding:16px;color:#888;">Loading events...</div>';
     try {
+        console.log('📡 Fetching events from:', EVENTS_API_BASE);
         const res = await fetch(EVENTS_API_BASE);
+        
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
         const data = await res.json();
+        console.log('✅ Events data received:', data);
         eventsData = Array.isArray(data) ? data : [];
         
         // Get current alumni data once for all cards
@@ -119,7 +129,11 @@ async function renderEvents() {
             eventsGrid.innerHTML = '<div style="padding:16px;color:#888;">No events found.</div>';
         }
     } catch (e) {
-        eventsGrid.innerHTML = '<div style="padding:16px;color:#b3261e;">Error loading events.</div>';
+        console.error('❌ Error loading events:', e);
+        eventsGrid.innerHTML = `<div style="padding:16px;color:#b3261e;">
+            Error loading events: ${e.message}<br>
+            <small>Check console for details. Make sure the server is running.</small>
+        </div>`;
     }
 }
 
@@ -379,8 +393,10 @@ async function cancelEventRegistration(eventId) {
     }
 }
 
-renderEvents();
-
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    renderEvents();
+});
 // Make functions globally accessible for onclick handlers
 window.registerForEventFromModal = registerForEventFromModal;
 window.cancelEventRegistrationFromModal = cancelEventRegistrationFromModal;

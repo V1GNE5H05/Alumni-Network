@@ -224,8 +224,16 @@ window.loadEvents = async function() {
   }
   
   try {
+    console.log('📡 Fetching events from:', `${API_URL}/api/events`);
     const res = await fetch(`${API_URL}/api/events`);
-    allEvents = await res.json();
+    
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    
+    const data = await res.json();
+    console.log('✅ Events data received:', data);
+    allEvents = Array.isArray(data) ? data : [];
     
     if (typeof SearchManager !== 'undefined') {
       SearchManager.currentData.events = allEvents;
@@ -233,8 +241,8 @@ window.loadEvents = async function() {
     
     renderEvents(allEvents);
   } catch (err) {
-    console.error('Error loading events:', err);
-    alert('Failed to load events');
+    console.error('❌ Error loading events:', err);
+    alert(`Failed to load events: ${err.message}\n\nPlease make sure the server is running.`);
   } finally {
     if (typeof LoadingManager !== 'undefined') {
       LoadingManager.hide();

@@ -74,6 +74,12 @@
         </div>
     </div>
       <script src="../config.js"></script>
+      <script src="../auth-check.js"></script>
+      <script>
+        // Check authentication immediately
+        AuthCheck.requireAuth();
+        AuthCheck.preventBackButton();
+      </script>
       <script src="event_page.js" defer></script>
 </body>
 </html>
