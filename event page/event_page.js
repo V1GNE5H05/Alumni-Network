@@ -1,3 +1,12 @@
+// ============= AUTHENTICATION CHECK =============
+if (typeof AuthCheck !== 'undefined') {
+    if (!AuthCheck.requireAuth()) {
+        // Will redirect if not authenticated
+    } else {
+        AuthCheck.preventBackButton();
+    }
+}
+
 // Dark Mode Implementation
 const DarkMode = {
     init() {
@@ -65,8 +74,8 @@ async function renderEvents() {
         console.log('✅ Events data received:', data);
         eventsData = Array.isArray(data) ? data : [];
         
-        // Get current alumni data once for all cards
-        const currentAlumni = await getCurrentAlumniData();
+        // Get current user ID
+        const currentUserId = sessionStorage.getItem('loggedInUser');
         
         eventsGrid.innerHTML = '';
         eventsData.forEach(event => {
@@ -75,7 +84,7 @@ async function renderEvents() {
             
             // Check if user is registered
             const isRegistered = event.participants && event.participants.some(
-                p => p.alumniId === currentAlumni.alumniId
+                p => p.alumniId === currentUserId
             );
             
             const participantCountHTML = event.allowParticipation 
@@ -152,21 +161,20 @@ function openModal(modalId, event = null) {
         
         // Add participation button if event allows participation
         if (event.allowParticipation === true || event.allowParticipation === 'true') {
-            getCurrentAlumniData().then(currentAlumni => {
-                const isRegistered = event.participants && event.participants.some(
-                    p => p.alumniId === currentAlumni.alumniId
-                );
-                
-                const participantInfo = event.participantCount 
-                    ? `<p style="margin:15px 0;color:#1976d2;font-weight:500;">👥 ${event.participantCount} alumni registered</p>`
-                    : '';
-                
-                const participationBtn = isRegistered
-                    ? `<button onclick="cancelEventRegistrationFromModal('${event._id}')" style="width:100%;padding:12px;margin-top:15px;background:linear-gradient(135deg,#fc8181,#f56565);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:500;font-size:1rem;">Cancel Registration</button>`
-                    : `<button onclick="registerForEventFromModal('${event._id}')" style="width:100%;padding:12px;margin-top:15px;background:linear-gradient(135deg,#48bb78,#38a169);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:500;font-size:1rem;">Register for Event</button>`;
-                
-                viewModalDesc.innerHTML = descriptionHTML + participantInfo + participationBtn;
-            });
+            const currentUserId = sessionStorage.getItem('loggedInUser');
+            const isRegistered = event.participants && event.participants.some(
+                p => p.alumniId === currentUserId
+            );
+            
+            const participantInfo = event.participantCount 
+                ? `<p style="margin:15px 0;color:#1976d2;font-weight:500;">👥 ${event.participantCount} alumni registered</p>`
+                : '';
+            
+            const participationBtn = isRegistered
+                ? `<button onclick="cancelEventRegistrationFromModal('${event._id}')" style="width:100%;padding:12px;margin-top:15px;background:linear-gradient(135deg,#fc8181,#f56565);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:500;font-size:1rem;">Cancel Registration</button>`
+                : `<button onclick="registerForEventFromModal('${event._id}')" style="width:100%;padding:12px;margin-top:15px;background:linear-gradient(135deg,#48bb78,#38a169);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:500;font-size:1rem;">Register for Event</button>`;
+            
+            viewModalDesc.innerHTML = descriptionHTML + participantInfo + participationBtn;
         } else {
             viewModalDesc.innerHTML = descriptionHTML;
         }
@@ -269,9 +277,14 @@ async function getCurrentAlumniData() {
 
 // Register for event
 async function registerForEvent(eventId) {
-    const alumni = await getCurrentAlumniData();
+    const userid = sessionStorage.getItem('loggedInUser');
     
-    if (!confirm(`Register for this event as ${alumni.alumniName}?`)) {
+    if (!userid) {
+        alert('Please login to register for events');
+        return;
+    }
+    
+    if (!confirm('Do you want to register for this event?')) {
         return;
     }
     
@@ -280,16 +293,14 @@ async function registerForEvent(eventId) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                alumniId: alumni.alumniId,
-                alumniName: alumni.alumniName,
-                alumniEmail: alumni.alumniEmail
+                alumniId: userid
             })
         });
         
         const data = await res.json();
         
         if (data.success) {
-            alert('✅ ' + data.message);
+            alert('✅ Successfully registered for the event!');
             renderEvents(); // Refresh the events
         } else {
             alert('❌ ' + data.message);
@@ -301,9 +312,14 @@ async function registerForEvent(eventId) {
 
 // Register for event from modal
 async function registerForEventFromModal(eventId) {
-    const alumni = await getCurrentAlumniData();
+    const userid = sessionStorage.getItem('loggedInUser');
     
-    if (!confirm(`Do you want to register for this event?\n\nName: ${alumni.alumniName}\nEmail: ${alumni.alumniEmail}`)) {
+    if (!userid) {
+        alert('Please login to register for events');
+        return;
+    }
+    
+    if (!confirm('Do you want to register for this event?')) {
         return;
     }
     
@@ -312,16 +328,14 @@ async function registerForEventFromModal(eventId) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                alumniId: alumni.alumniId,
-                alumniName: alumni.alumniName,
-                alumniEmail: alumni.alumniEmail
+                alumniId: userid
             })
         });
         
         const data = await res.json();
         
         if (data.success) {
-            alert('✅ ' + data.message);
+            alert('✅ Successfully registered for the event!');
             closeModal('viewEventModal');
             renderEvents(); // Refresh the events
         } else {
@@ -334,7 +348,12 @@ async function registerForEventFromModal(eventId) {
 
 // Cancel event registration from modal
 async function cancelEventRegistrationFromModal(eventId) {
-    const alumni = await getCurrentAlumniData();
+    const userid = sessionStorage.getItem('loggedInUser');
+    
+    if (!userid) {
+        alert('Please login first');
+        return;
+    }
     
     if (!confirm('Are you sure you want to cancel your registration?')) {
         return;
@@ -345,14 +364,14 @@ async function cancelEventRegistrationFromModal(eventId) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                alumniId: alumni.alumniId
+                alumniId: userid
             })
         });
         
         const data = await res.json();
         
         if (data.success) {
-            alert('✅ ' + data.message);
+            alert('✅ Registration cancelled successfully!');
             closeModal('viewEventModal');
             renderEvents(); // Refresh the events
         } else {
@@ -365,7 +384,12 @@ async function cancelEventRegistrationFromModal(eventId) {
 
 // Cancel event registration
 async function cancelEventRegistration(eventId) {
-    const alumni = getCurrentAlumniData();
+    const userid = sessionStorage.getItem('loggedInUser');
+    
+    if (!userid) {
+        alert('Please login first');
+        return;
+    }
     
     if (!confirm('Are you sure you want to cancel your registration?')) {
         return;
@@ -376,14 +400,14 @@ async function cancelEventRegistration(eventId) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                alumniId: alumni.alumniId
+                alumniId: userid
             })
         });
         
         const data = await res.json();
         
         if (data.success) {
-            alert('✅ ' + data.message);
+            alert('✅ Registration cancelled successfully!');
             renderEvents(); // Refresh the events
         } else {
             alert('❌ ' + data.message);
