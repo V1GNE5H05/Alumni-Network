@@ -40,16 +40,11 @@ const DarkMode = {
     },
     
     addToggle() {
-        if (document.getElementById('darkModeToggle')) return;
-        
-        const btn = document.createElement('button');
-        btn.id = 'darkModeToggle';
-        btn.className = 'dark-mode-toggle';
-        btn.textContent = '☀️';
-        btn.title = 'Toggle Dark/Light Mode';
-        btn.onclick = () => this.toggle();
-        
-        document.body.appendChild(btn);
+        // Button is already in HTML, just set up the click handler
+        const btn = document.getElementById('darkModeToggle');
+        if (btn) {
+            btn.onclick = () => this.toggle();
+        }
     }
 };
 

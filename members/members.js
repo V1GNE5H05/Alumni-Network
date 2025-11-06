@@ -24,22 +24,18 @@ const DarkMode = {
     },
     
     createToggleButton() {
-        if (document.getElementById('darkModeToggle')) return;
-        
-        const btn = document.createElement('button');
-        btn.id = 'darkModeToggle';
-        btn.className = 'dark-mode-toggle';
-        btn.innerHTML = '🌙';
-        btn.onclick = () => {
-            this.toggle();
-            btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-        };
-        
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = '☀️';
+        // Button is already in HTML, just set up the click handler
+        const btn = document.getElementById('darkModeToggle');
+        if (btn) {
+            btn.onclick = () => {
+                this.toggle();
+                btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            };
+            
+            if (document.body.classList.contains('dark-mode')) {
+                btn.innerHTML = '☀️';
+            }
         }
-        
-        document.body.appendChild(btn);
     }
 };
 

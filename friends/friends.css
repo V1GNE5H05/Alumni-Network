@@ -701,9 +701,6 @@ body[data-theme="light"] {
 
 /* Dark Mode Toggle Button */
 .dark-mode-toggle {
-    position: fixed;
-    top: 15px;
-    right: 200px;
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -717,7 +714,8 @@ body[data-theme="light"] {
     justify-content: center;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     transition: all 0.3s ease;
-    z-index: 1000;
+    margin-left: auto;
+    margin-right: 20px;
 }
 
 .dark-mode-toggle:hover {

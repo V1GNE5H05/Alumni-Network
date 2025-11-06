@@ -133,9 +133,6 @@
 
   /* Dark Mode Toggle Button */
   .dark-mode-toggle {
-   position: fixed;
-   top: 15px;
-   right: 200px;
    width: 48px;
    height: 48px;
    border-radius: 50%;
@@ -148,8 +145,9 @@
    justify-content: center;
    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
    transition: all 0.3s ease;
-   z-index: 1000;
    color: white;
+   margin-left: auto;
+   margin-right: 20px;
   }
 
   .dark-mode-toggle:hover {
@@ -224,6 +222,7 @@
     <div class="logo-title-row">
       <a href="/home page/home_page.html"><img src="/images/clg_logo.png" alt="Mepco Schlenk Engineering College Logo" class="header-logo" /></a>
     </div>
+    <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle Dark Mode">🌙</button>
     <div class="contact">
       <label>📞+91-4562-235104,235120</label><br><br>
       <label>✉️ msec@mepcoeng.ac.in</label>
@@ -289,10 +288,6 @@
   <div id="caption"></div>
  </div>
 
- <footer>
-  <p>© 2025 MEPCO SCHLENK ENGINEERING COLLEGE. All rights reserved.</p>
- </footer>
-
  <script>
   // Dark Mode Implementation
   const DarkMode = {
@@ -311,22 +306,18 @@
     },
     
     createToggleButton() {
-        if (document.getElementById('darkModeToggle')) return;
-        
-        const btn = document.createElement('button');
-        btn.id = 'darkModeToggle';
-        btn.className = 'dark-mode-toggle';
-        btn.innerHTML = '🌙';
-        btn.onclick = () => {
-            this.toggle();
-            btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-        };
-        
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = '☀️';
+        // Button is already in HTML, just set up the click handler
+        const btn = document.getElementById('darkModeToggle');
+        if (btn) {
+            btn.onclick = () => {
+                this.toggle();
+                btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            };
+            
+            if (document.body.classList.contains('dark-mode')) {
+                btn.innerHTML = '☀️';
+            }
         }
-        
-        document.body.appendChild(btn);
     }
   };
 

@@ -29,6 +29,20 @@ document.getElementById('postInternForm').addEventListener('submit', async funct
     msg.style.color = "#e22";
     return;
   }
+  
+  // Validate application deadline is not in the past
+  if (applicationDeadline) {
+    const selectedDate = new Date(applicationDeadline);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
+    
+    if (selectedDate < today) {
+      msg.textContent = "Application deadline cannot be in the past.";
+      msg.style.color = "#e22";
+      return;
+    }
+  }
+  
   if (!location.length) {
     msg.textContent = "Please enter at least one location.";
     msg.style.color = "#e22";

@@ -481,9 +481,6 @@ header p {
 
 /* Dark Mode Styles */
 .dark-mode-toggle {
-    position: fixed;
-    top: 15px;
-    right: 200px;
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -496,8 +493,9 @@ header p {
     justify-content: center;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     transition: all 0.3s ease;
-    z-index: 1000;
     color: white;
+    margin-left: auto;
+    margin-right: 20px;
 }
 
 .dark-mode-toggle:hover {

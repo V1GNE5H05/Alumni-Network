@@ -76,6 +76,20 @@ document.getElementById('postJobForm').addEventListener('submit', async function
     msg.style.color = "#e22";
     return;
   }
+  
+  // Validate application deadline is not in the past
+  if (applicationDeadline) {
+    const selectedDate = new Date(applicationDeadline);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
+    
+    if (selectedDate < today) {
+      msg.textContent = "Application deadline cannot be in the past.";
+      msg.style.color = "#e22";
+      return;
+    }
+  }
+  
   // Location is now optional
   // if (!location.length) {
   //   msg.textContent = "Please enter at least one location.";
