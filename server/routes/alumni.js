@@ -6,14 +6,14 @@ const { asyncHandler, validateEmail } = require('../utils/helpers');
 
 // Get all students
 router.get('/students', asyncHandler(async (req, res) => {
-  const collection = getCollection('student');
+  const collection = getCollection('students');
   const students = await collection.find({}).toArray();
   res.json({ success: true, students });
 }));
 
 // Get statistics
 router.get('/statistics', asyncHandler(async (req, res) => {
-  const studentsCollection = getCollection('student');
+  const studentsCollection = getCollection('students');
   
   const totalAlumni = await studentsCollection.countDocuments();
   
@@ -43,7 +43,7 @@ router.get('/statistics', asyncHandler(async (req, res) => {
 
 // Get profile by username/email/alumni_id
 router.get('/profile/:username', asyncHandler(async (req, res) => {
-  const collection = getCollection('student');
+  const collection = getCollection('students');
   const usersCollection = getCollection('users');
   
   // First try to find in the student collection
@@ -85,7 +85,7 @@ router.get('/profile/:username', asyncHandler(async (req, res) => {
 
 // Update profile
 router.put('/profile/:username', asyncHandler(async (req, res) => {
-  const collection = getCollection('student');
+  const collection = getCollection('students');
   const usersCollection = getCollection('users');
   
   const updateFields = { ...req.body };
@@ -235,7 +235,7 @@ router.put('/profile/:username/password', asyncHandler(async (req, res) => {
 
 // Add new student
 router.post('/student', asyncHandler(async (req, res) => {
-  const collection = getCollection('student');
+  const collection = getCollection('students');
   const usersCollection = getCollection('users');
   
   const result = await collection.insertOne(req.body);
@@ -259,7 +259,7 @@ router.post('/student', asyncHandler(async (req, res) => {
 
 // Update student
 router.put('/student/:id', asyncHandler(async (req, res) => {
-  const collection = getCollection('student');
+  const collection = getCollection('students');
   const usersCollection = getCollection('users');
   const { id } = req.params;
   
@@ -310,7 +310,7 @@ router.put('/student/:id', asyncHandler(async (req, res) => {
 
 // Delete student
 router.delete('/student/:id', asyncHandler(async (req, res) => {
-  const collection = getCollection('student');
+  const collection = getCollection('students');
   const result = await collection.deleteOne({ 
     _id: new ObjectId(req.params.id) 
   });
@@ -330,7 +330,7 @@ router.delete('/student/:id', asyncHandler(async (req, res) => {
 
 // Bulk delete students
 router.post('/students/bulk-delete', asyncHandler(async (req, res) => {
-  const collection = getCollection('student');
+  const collection = getCollection('students');
   const { ids } = req.body;
   
   if (!Array.isArray(ids) || ids.length === 0) {

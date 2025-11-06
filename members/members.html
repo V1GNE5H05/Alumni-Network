@@ -19,16 +19,15 @@
     </div>
     <nav class="navbar">
         <ul>
-            <a href="../chat/chat_ui.html"><li style="position: relative; left: 10px;">MESSAGES</li></a>
             <a href="../alumni profile/alumni_profile.html"><li style="position: relative; left: 10px;">PROFILE</li></a>
-            <a href="members.html"><li style="position: relative; left: 10px;" class="active">MEMBERS</li></a>
+            <a href="../friends/friends.html"><li style="position: relative; left: 10px;">FRIENDS</li></a>
             <a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
             <a href="../event page/event_page.html"><li>EVENTS</li></a>
             <a href="../gallery/gallery.html"><li>GALLERY</li></a>
             <a href="../proudable_alumni/proudable_alumni.html"><li>PROUDABLE ALUMNI</li></a>
             <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
-            <a href="#"><li style="position: relative; left: 290px;">ABOUT US</li></a>
-            <a href="../index.html"><li style="position: relative; left: 300px;">LOGOUT</li></a>
+            <a href="../members/members.html"><li style="position: relative; left: 290px;" class="active">MEMBERS</li></a>
+            <a href="#" onclick="event.preventDefault(); AuthCheck.logout();"><li style="position: relative; left: 300px;">LOGOUT</li></a>
         </ul>
     </nav>
 
@@ -44,9 +43,11 @@
     </div>
 
     <footer style="background: var(--navbar-bg, #1651a7); color: white; text-align: center; padding: 20px; margin-top: 50px;">
+    <footer style="background: var(--navbar-bg, #1651a7); color: white; text-align: center; padding: 20px; margin-top: 50px;">
         <p>© 2025 MSEC Alumni Network | Built with ❤️</p>
     </footer>
 
+      <script src="../auth-check.js"></script>
       <script src="../config.js"></script>
     <script src="members.js"></script>
 </body>

@@ -1,3 +1,44 @@
+// Dark Mode Implementation
+const DarkMode = {
+    init() {
+        const isDark = localStorage.getItem('darkMode') === 'true';
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+        }
+        this.createToggleButton();
+    },
+    
+    toggle() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+    },
+    
+    createToggleButton() {
+        if (document.getElementById('darkModeToggle')) return;
+        
+        const btn = document.createElement('button');
+        btn.id = 'darkModeToggle';
+        btn.className = 'dark-mode-toggle';
+        btn.innerHTML = '🌙';
+        btn.onclick = () => {
+            this.toggle();
+            btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        };
+        
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️';
+        }
+        
+        document.body.appendChild(btn);
+    }
+};
+
+// Initialize dark mode
+document.addEventListener('DOMContentLoaded', () => {
+    DarkMode.init();
+});
+
 let eventsData = [];
 const EVENTS_API_BASE = window.API_BASE_URL ? `${window.API_BASE_URL}/api/events` : 'http://localhost:5000/api/events';
 

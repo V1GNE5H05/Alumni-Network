@@ -4,29 +4,61 @@
   box-sizing: border-box;
 }
 
+/* ========== DARK MODE CSS VARIABLES ========== */
+:root {
+  --bg-primary: #f7f8f5;
+  --bg-secondary: #ffffff;
+  --text-primary: #222222;
+  --text-secondary: #2c2c2c;
+  --text-muted: #9aa0a6;
+  --border-color: #e3e7ee;
+  --shadow: 0 4px 18px -10px #b9b9b9;
+  --navbar-bg: #1651a7;
+  --card-bg: #ffffff;
+  --hover-bg: #f1f6ff;
+  --accent: #1c08f8;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --text-primary: #f7fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #a0aec0;
+  --border-color: #4a5568;
+  --shadow: 0 4px 18px -10px rgba(0, 0, 0, 0.5);
+  --navbar-bg: #2c5282;
+  --card-bg: #2d3748;
+  --hover-bg: #374151;
+  --accent: #90cdf4;
+}
+
 html {
   overflow-x: hidden;
   max-width: 100vw;
 }
 
 body {
-  background: #f7f8f5;
+  background: var(--bg-primary);
   margin: 0;
   font-family: 'Segoe UI', Arial, sans-serif;
   overflow-x: hidden;
   max-width: 100vw;
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 .top-header {
   display: flex;
   align-items: center;
   padding: 0 32px;
-  border-bottom: 1px solid #e3e7ee;
+  border-bottom: 1px solid var(--border-color);
   height: 80px;
-  background: #fff;
+  background: var(--bg-secondary);
+  transition: all 0.3s ease;
 }
 a {
   text-decoration: none;
-  color: #0073e6;
+  color: var(--accent);
   transition: color 0.2s;
 }
 .logo-title-row {
@@ -48,10 +80,15 @@ a {
   font-weight: 500;
 }
 
+[data-theme="dark"] .contact {
+  color: var(--accent);
+}
+
 .navbar {
-  background: #1651a7;
+  background: var(--navbar-bg);
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   margin-bottom: 0;
+  transition: background 0.3s ease;
 }
 .navbar ul {
   list-style: none;
@@ -72,6 +109,36 @@ a {
 }
 .navbar li:hover {
   color: #ffd700;
+}
+
+/* ========== DARK MODE TOGGLE BUTTON ========== */
+.dark-mode-toggle {
+  position: fixed;
+  top: 15px;
+  right: 200px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  z-index: 1000;
+  color: white;
+}
+
+.dark-mode-toggle:hover {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.dark-mode-toggle:active {
+  transform: scale(0.95);
 }
 
 /* Topbar buttons */
@@ -131,16 +198,17 @@ a {
   min-height: 98vh;
 }
 .sidebar-list {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 10px;
-  box-shadow: 0 4px 26px -10px #b9b9b9;
+  box-shadow: var(--shadow);
   overflow-y: auto;
   padding: 0;
   width: 100%;
   margin-top: 30px;
+  transition: all 0.3s ease;
 }
 .sidebar-section {
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 0;
   margin-bottom: 0;
 }
@@ -152,18 +220,18 @@ a {
   align-items: center;
   padding: 16px 22px;
   font-size: 1.08em;
-  color: #23243d;
+  color: var(--text-secondary);
   cursor: pointer;
   border-left: 3px solid transparent;
   transition: background 0.12s, border-color 0.12s;
   font-weight: 500;
-  background: #fff;
+  background: var(--card-bg);
 }
 .sidebar-item.active,
 .sidebar-item:hover {
-  background: #f1f6ff;
-  border-left: 3px solid #1c08f8;
-  color: #1c08f8;
+  background: var(--hover-bg);
+  border-left: 3px solid var(--accent);
+  color: var(--accent);
 }
 .sidebar-item .icon {
   font-size: 1.15em;
@@ -172,7 +240,7 @@ a {
 .sidebar-dropdown .chevron {
   margin-left: auto;
   font-size: 1.2em;
-  color: #b0b1bc;
+  color: var(--text-muted);
   transition: transform 0.2s;
 }
 .sidebar-dropdown.open .chevron {
@@ -180,9 +248,9 @@ a {
 }
 .sidebar-dropdown-list {
   display: none;
-  background: #fff;
-  border-top: 1px solid #f2f2f2;
-  border-left: 3px solid #e4e8f7;
+  background: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+  border-left: 3px solid var(--border-color);
 }
 .sidebar-dropdown-list.show {
   display: block;
@@ -190,18 +258,18 @@ a {
 .sidebar-subitem {
   padding: 11px 34px;
   font-size: 0.99em;
-  color: #2c2c2c;
-  background: #fff;
+  color: var(--text-secondary);
+  background: var(--card-bg);
   cursor: pointer;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid var(--border-color);
   transition: background 0.10s;
 }
 .sidebar-subitem:last-child {
   border-bottom: none;
 }
 .sidebar-subitem:hover {
-  background: #f0f4fa;
-  color: #1c08f8;
+  background: var(--hover-bg);
+  color: var(--accent);
 }
 
 /* Job list panel */
@@ -213,11 +281,12 @@ a {
 }
 .job-list-card {
   border-radius: 12px;
-  box-shadow: 0 4px 18px -10px #b9b9b9;
-  background: #fff;
+  box-shadow: var(--shadow);
+  background: var(--card-bg);
   margin-bottom: 28px;
   padding: 24px 30px 18px 30px;
   font-size: 1.07em;
+  transition: all 0.3s ease;
 }
 
 /* --- Compact job card styles --- */
@@ -233,11 +302,11 @@ a {
 .job-card-title {
   font-size: 1.35em;
   font-weight: 600;
-  color: #111;
+  color: var(--text-primary);
   letter-spacing: 0.01em;
 }
 .job-age {
-  color: #9aa0a6;
+  color: var(--text-muted);
   font-size: 0.98em;
 }
 .job-row {
@@ -247,7 +316,7 @@ a {
   margin: 10px 0;
 }
 .job-label {
-  color: #b3b3b3;
+  color: var(--text-muted);
   min-width: 120px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -255,19 +324,19 @@ a {
   font-size: 0.96em;
 }
 .job-value {
-  color: #222;
+  color: var(--text-secondary);
   line-height: 1.5em;
   flex: 1 1 auto;
 }
 .job-link, .job-filter-link, .job-company-filter, .job-area-filter, .job-skill-filter, .job-location-filter {
-  color: #1c08f8;
+  color: var(--accent);
   text-decoration: underline;
   cursor: pointer;
 }
 .job-card-source {
   margin-top: 12px;
   text-align: right;
-  color: #b3b3b3;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-weight: 600;
@@ -276,8 +345,8 @@ a {
 
 /* highlight selected filter item in the sidebar */
 .sidebar-subitem.active {
-  background: #f0f4fa;
-  color: #1c08f8;
+  background: var(--hover-bg);
+  color: var(--accent);
   font-weight: 600;
 }
 

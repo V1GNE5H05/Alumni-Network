@@ -2,6 +2,15 @@
 const identifier = sessionStorage.getItem('loggedInUser');
 const API_URL = window.API_BASE_URL || 'http://localhost:5000';
 
+// ============= AUTHENTICATION CHECK =============
+// Check authentication on page load
+if (!AuthCheck.requireAuth()) {
+    // Will redirect if not authenticated
+} else {
+    // Initialize auth protection
+    AuthCheck.init();
+}
+
 // ============= DARK MODE FUNCTIONALITY =============
 const DarkMode = {
   THEME_KEY: 'alumni_theme',

@@ -4,7 +4,53 @@
 const API_BASE_URL = window.API_BASE_URL || 'http://localhost:5000';
 let currentView = 'jobs'; // Track current view
 
+// ============= DARK MODE FUNCTIONALITY =============
+const DarkMode = {
+  THEME_KEY: 'alumni_theme',
+  
+  init() {
+    const saved = localStorage.getItem(this.THEME_KEY) || 'light';
+    this.apply(saved);
+    this.addToggle();
+  },
+  
+  apply(theme) {
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem(this.THEME_KEY, theme);
+    const icon = theme === 'dark' ? '☀️' : '🌙';
+    const btn = document.getElementById('darkModeToggle');
+    if (btn) btn.textContent = icon;
+  },
+  
+  toggle() {
+    const current = document.body.getAttribute('data-theme') || 'light';
+    this.apply(current === 'dark' ? 'light' : 'dark');
+  },
+  
+  addToggle() {
+    if (document.getElementById('darkModeToggle')) return;
+    
+    const btn = document.createElement('button');
+    btn.id = 'darkModeToggle';
+    btn.className = 'dark-mode-toggle';
+    btn.textContent = '🌙';
+    btn.title = 'Toggle Dark Mode (Ctrl+D)';
+    btn.onclick = () => this.toggle();
+    
+    document.body.appendChild(btn);
+  }
+};
+
+// ============= KEYBOARD SHORTCUTS =============
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+    e.preventDefault();
+    DarkMode.toggle();
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
+  DarkMode.init();
   setupDropdownToggles();
   setupViewSwitching();
   Promise.all([initCompanies(), initJobAreas(), initSkills(), initLocations()]).then(() => {

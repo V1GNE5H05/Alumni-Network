@@ -478,3 +478,163 @@ header p {
         width: 100%;
     }
 }
+
+/* Dark Mode Styles */
+.dark-mode-toggle {
+    position: fixed;
+    top: 15px;
+    right: 200px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    color: white;
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.dark-mode-toggle:active {
+    transform: scale(0.95);
+}
+
+body.dark-mode {
+    --bg-color: #1a1a2e;
+    --card-bg: #16213e;
+    --text-color: #e4e4e4;
+    --secondary-text-color: #a0a0a0;
+    --primary-color: #4da6ff;
+    --accent-color: #66b3ff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+body.dark-mode .top-header {
+    background: #0f1419;
+    border-bottom: 1px solid #2a2a3e;
+}
+
+body.dark-mode .navbar {
+    background: #16213e;
+}
+
+body.dark-mode .navbar li {
+    color: #e4e4e4;
+}
+
+body.dark-mode .navbar li:hover {
+    color: #4da6ff;
+}
+
+body.dark-mode .contact {
+    color: #4da6ff;
+}
+
+body.dark-mode header h1 {
+    color: var(--primary-color);
+}
+
+body.dark-mode header p {
+    color: var(--secondary-text-color);
+}
+
+body.dark-mode .event-card {
+    background: var(--card-bg);
+    border: 1px solid #2a2a3e;
+}
+
+body.dark-mode .event-card:hover {
+    box-shadow: 0 8px 30px rgba(77, 166, 255, 0.2);
+    border-color: #4da6ff;
+}
+
+body.dark-mode header h1 {
+    color: var(--primary-color);
+}
+
+body.dark-mode header p {
+    color: var(--secondary-text-color);
+}
+
+body.dark-mode .event-details h2 {
+    color: #e4e4e4;
+}
+
+body.dark-mode .event-meta {
+    color: #a0a0a0;
+}
+
+body.dark-mode .add-event-btn {
+    background: linear-gradient(135deg, #4da6ff, #66b3ff);
+}
+
+body.dark-mode .add-event-btn:hover {
+    background: linear-gradient(135deg, #66b3ff, #80c0ff);
+}
+
+body.dark-mode .register-btn {
+    background: linear-gradient(135deg, #4da6ff, #66b3ff);
+}
+
+body.dark-mode .register-btn:hover {
+    background: linear-gradient(135deg, #66b3ff, #80c0ff);
+}
+
+body.dark-mode .cancel-btn {
+    background: #e53e3e;
+    color: white;
+}
+
+body.dark-mode .cancel-btn:hover {
+    background: #c53030;
+}
+
+body.dark-mode .modal-content {
+    background: #16213e;
+    border: 1px solid #2a2a3e;
+}
+
+body.dark-mode .close {
+    color: #a0a0a0;
+}
+
+body.dark-mode .close:hover {
+    color: #e4e4e4;
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background: #1a1a2e;
+    border: 1px solid #2a2a3e;
+    color: #e4e4e4;
+}
+
+body.dark-mode input:focus,
+body.dark-mode textarea:focus,
+body.dark-mode select:focus {
+    border-color: #4da6ff;
+}
+
+body.dark-mode label {
+    color: #e4e4e4;
+}
+
+body.dark-mode .participant-count {
+    color: #a0a0a0;
+}
+
+body.dark-mode .registration-badge {
+    background: linear-gradient(135deg, #4da6ff, #66b3ff);
+}

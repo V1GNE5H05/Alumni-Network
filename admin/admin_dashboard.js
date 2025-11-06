@@ -6,6 +6,15 @@
 
 const API_URL = window.API_BASE_URL || 'http://localhost:5000';
 
+// ============= AUTHENTICATION CHECK =============
+// Check admin authentication on page load
+if (!AuthCheck.requireAdmin()) {
+    // Will redirect if not admin
+} else {
+    // Initialize auth protection
+    AuthCheck.init();
+}
+
 // ============= FEATURE 4: AUTHENTICATION & SESSION (DISABLED) =============
 // Authentication removed - Direct access enabled
 // You can add your own authentication later if needed
@@ -25,7 +34,7 @@ const AuthManager = {
   
   logout() {
     if (confirm('Are you sure you want to logout?')) {
-      window.location.href = '../login/login_page.html';
+      AuthCheck.logout();
     }
   },
   

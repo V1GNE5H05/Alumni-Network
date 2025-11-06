@@ -135,3 +135,9 @@ input:focus, select:focus, textarea:focus {
   .job-form-card { padding: 17px 7vw; }
   .job-form-topbar { padding-right: 5vw; }
 }
+
+body.dark-mode .top-header { background: #0f1419; border-bottom: 1px solid #2a2a3e; }
+body.dark-mode .navbar { background: #16213e; }
+body.dark-mode .navbar li { color: #e4e4e4; }
+body.dark-mode .navbar li:hover { color: #4da6ff; }
+body.dark-mode .contact { color: #4da6ff; }

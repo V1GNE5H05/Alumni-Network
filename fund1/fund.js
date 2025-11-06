@@ -2,7 +2,46 @@
 // If using Live Server on port 5501 and API on 5000:
 const API_BASE = window.API_BASE_URL || 'http://localhost:5000';  // or 'http://127.0.0.1:5000'
 
-document.addEventListener("DOMContentLoaded", initFunds);
+// Dark Mode Implementation
+const DarkMode = {
+    init() {
+        const isDark = localStorage.getItem('darkMode') === 'true';
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+        }
+        this.createToggleButton();
+    },
+    
+    toggle() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+    },
+    
+    createToggleButton() {
+        if (document.getElementById('darkModeToggle')) return;
+        
+        const btn = document.createElement('button');
+        btn.id = 'darkModeToggle';
+        btn.className = 'dark-mode-toggle';
+        btn.innerHTML = '🌙';
+        btn.onclick = () => {
+            this.toggle();
+            btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        };
+        
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️';
+        }
+        
+        document.body.appendChild(btn);
+    }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    DarkMode.init();
+    initFunds();
+});
 
 async function initFunds() {
   const container = document.getElementById("fund-container");

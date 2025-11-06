@@ -9,6 +9,13 @@ let activeFriend = null;
 let currentFriendshipId = null;
 let messageInterval = null;
 
+// Authentication check
+if (!AuthCheck.requireAuth()) {
+    // Will redirect if not authenticated
+} else {
+    AuthCheck.init();
+}
+
 // Dark Mode Management
 const DarkMode = {
     THEME_KEY: 'alumni_theme',
@@ -221,7 +228,7 @@ function showInvitationsView() {
 // Load all alumni for adding friends
 async function loadAllAlumni() {
     try {
-        const response = await fetch('${API_BASE_URL}/students');
+        const response = await fetch(`${API_BASE_URL}/students`);
         const data = await response.json();
         
         console.log('Alumni data received:', data);
@@ -361,7 +368,7 @@ async function sendInvitation(receiverId, receiverName) {
     if (!currentUser) return;
 
     try {
-        const response = await fetch('${API_BASE_URL}/api/friends/invite', {
+        const response = await fetch(`${API_BASE_URL}/api/friends/invite`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -543,7 +550,7 @@ async function sendMessage() {
     if (!message || !currentFriendshipId) return;
 
     try {
-        const response = await fetch('${API_BASE_URL}/api/friends/messages', {
+        const response = await fetch(`${API_BASE_URL}/api/friends/messages`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

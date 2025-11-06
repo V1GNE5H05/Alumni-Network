@@ -1,6 +1,58 @@
 // Proudable Alumni Display Page JavaScript
 
+// Dark Mode Implementation
+const DarkMode = {
+    init() {
+        const isDark = localStorage.getItem('darkMode') === 'true';
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+        }
+        this.createToggleButton();
+        this.addKeyboardShortcut();
+    },
+    
+    toggle() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+    },
+    
+    createToggleButton() {
+        if (document.getElementById('darkModeToggle')) return;
+        
+        const btn = document.createElement('button');
+        btn.id = 'darkModeToggle';
+        btn.className = 'dark-mode-toggle';
+        btn.innerHTML = '🌙';
+        btn.setAttribute('aria-label', 'Toggle Dark Mode');
+        btn.onclick = () => {
+            this.toggle();
+            btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        };
+        
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️';
+        }
+        
+        document.body.appendChild(btn);
+    },
+    
+    addKeyboardShortcut() {
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'd') {
+                e.preventDefault();
+                this.toggle();
+                const btn = document.getElementById('darkModeToggle');
+                if (btn) {
+                    btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+                }
+            }
+        });
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
+    DarkMode.init();
     loadProudableAlumni();
 });
 

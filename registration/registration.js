@@ -58,7 +58,7 @@ const steps = [
     },
     {
         id: 'name',
-        botMessage: '✨ Now, kindly enter your Name (Eg: Sankara Narayanan). Try searching: Sankar or Narayananan. We recommend to try with your first name or last name.',
+        botMessage: '✨ Now, kindly enter your Name .',
         type: 'input',
         placeholder: 'Enter your full name',
         field: 'name'
